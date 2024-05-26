@@ -13,7 +13,7 @@ public class RoverTravel : MonoBehaviour
     private void Awake() {
         if (patrolPoints.Length <= 1) {
             Debug.LogError("Make sure to add more than 1 patrol point!");
-            enabled = false; // Disable the script if there are not enough patrol points
+            enabled = false; 
             return;
         }
 
