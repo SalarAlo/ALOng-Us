@@ -12,7 +12,7 @@ public class Rocket : MonoBehaviour
     private void Start() {
         Invoke(nameof(TriggerFly), flyStartDelay);
 
-        Destroy(gameObject, flyStartDelay + 1);
+        Destroy(gameObject, flyStartDelay + 10);
     }
 
     private void Update() {

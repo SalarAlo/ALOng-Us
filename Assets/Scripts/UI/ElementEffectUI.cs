@@ -20,6 +20,15 @@ public class ElementEffectUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private bool isHovered = false;
     private float transitionTimer = 0f;
 
+    private void OnDisable() {
+        rectTransform.localPosition = originalPosition;
+        
+        if (textField != null)
+            textField.color = originalColor;
+        else 
+            image.color = originalColor;
+    }
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
