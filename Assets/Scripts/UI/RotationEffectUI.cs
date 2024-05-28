@@ -9,7 +9,7 @@ public class RotationEffectUI : MonoBehaviour
     [SerializeField] private int rotations;
     [SerializeField] private Transform transformToRot;
     private float rotationAmount = 360f;
-    private float rotationSpeed = 360f; // Degrees per second
+    private float rotationSpeed = 720f; // Degrees per second
     private float totalRotation = 0f;
     private bool isRotating = false;
 
