@@ -9,7 +9,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class LobbyManager : SingletonPersistent<LobbyManager>
+public class LobbyManager : SingletonPersistent<LobbyManager> 
 {
     public Action<Lobby> OnLobbyJoined;
     private Lobby currentLobby;
@@ -30,6 +30,14 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
             Debug.Log(e.Message);
         }
     }
+
+    public async void QuickJoinLobby(){
+        try {
+            currentLobby = await Lobbies.Instance.QuickJoinLobbyAsync();
+        } catch (LobbyServiceException e) {
+            Debug.Log(e.Message);
+        }
+    } 
 
     public async void CreateLobbyAsync(string name, int maxPlayers, int imposters) {
         try {

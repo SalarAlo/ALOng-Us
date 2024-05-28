@@ -6,6 +6,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
 using UnityEditor.VersionControl;
 using TMPro;
+using System;
 
 public class LobbyMenuUI : BaseUI
 {
@@ -18,6 +19,7 @@ public class LobbyMenuUI : BaseUI
     [SerializeField] private Button backToMainMenuButton;
     [SerializeField] private Button refreshLobbiesButton;
     [SerializeField] private Button createLobbyButtonFinal;
+    [SerializeField] private Button quickJoinButton;
     
     [Header("Windows")]
     [SerializeField] private Transform createLobbyWindow;
@@ -39,7 +41,12 @@ public class LobbyMenuUI : BaseUI
         backToMainMenuButton.onClick.AddListener(BackToMainMenuButton_OnClick);
         refreshLobbiesButton.onClick.AddListener(RefreshLobbiesButton_OnClick);
         createLobbyButtonFinal.onClick.AddListener(CreateLobbyButtonFinal_OnClick);
+        quickJoinButton.onClick.AddListener(QuickJoinButton_OnClick);
         Hide();
+    }
+
+    private void QuickJoinButton_OnClick() {
+        LobbyManager.Instance.QuickJoinLobby();
     }
 
     private  void CreateLobbyButtonFinal_OnClick(){
@@ -64,7 +71,7 @@ public class LobbyMenuUI : BaseUI
             List<Lobby> lobbies = await LobbyManager.Instance.QueryLobbies();
             foreach (Lobby lobby in lobbies) {
                 SingleLobbyUI singleLobbyUI = Instantiate(singleLobbyUIPrefab, lobbyParentUI);
-                singleLobbyUIPrefab.SetLobby(lobby);
+                singleLobbyUI.SetLobby(lobby);
             }
         } catch (LobbyServiceException e) {
             Debug.Log(e.Message);

@@ -2,15 +2,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
-using UnityEditor.UI;
 
 public class ElementEffectUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private float transitionDuration = 0.5f;
     [SerializeField] private Vector3 hoverOffset = new Vector3(20f, 0f, 0f);
+    [SerializeField] private Vector3 hoverScale = new Vector3(1.2f, 1.2f, 1.2f);
     [SerializeField] private Color hoverColor = Color.green;
 
     private Vector3 originalPosition;
+    private Vector3 originalScale;
     private Color originalColor;
 
     private RectTransform rectTransform;
@@ -20,12 +21,14 @@ public class ElementEffectUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private bool isHovered = false;
     private float transitionTimer = 0f;
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         rectTransform.localPosition = originalPosition;
-        
+        rectTransform.localScale = originalScale;
+
         if (textField != null)
             textField.color = originalColor;
-        else 
+        else
             image.color = originalColor;
     }
 
@@ -33,11 +36,12 @@ public class ElementEffectUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         rectTransform = GetComponent<RectTransform>();
         originalPosition = rectTransform.localPosition;
+        originalScale = rectTransform.localScale;
         TryGetComponent(out image);
         TryGetComponent(out textField);
         if (textField != null)
             originalColor = textField.color;
-        else 
+        else
             originalColor = image.color;
     }
 
@@ -52,18 +56,21 @@ public class ElementEffectUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
             if (isHovered)
             {
                 rectTransform.localPosition = Vector3.Lerp(originalPosition, originalPosition + hoverOffset, t);
-                
+                rectTransform.localScale = Vector3.Lerp(originalScale, hoverScale, t);
+
                 if (textField != null)
                     textField.color = Color.Lerp(originalColor, hoverColor, t);
-                else 
+                else
                     image.color = Color.Lerp(originalColor, hoverColor, t);
             }
             else
             {
                 rectTransform.localPosition = Vector3.Lerp(originalPosition + hoverOffset, originalPosition, t);
+                rectTransform.localScale = Vector3.Lerp(hoverScale, originalScale, t);
+
                 if (textField != null)
                     textField.color = Color.Lerp(hoverColor, originalColor, t);
-                else 
+                else
                     image.color = Color.Lerp(hoverColor, originalColor, t);
             }
 
