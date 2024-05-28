@@ -5,7 +5,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : BaseUI
+public class MainMenuUI : MonoBehaviour
 {
     [Header("Buttons")]
     [SerializeField] private Button startGameButton;
@@ -15,8 +15,9 @@ public class MainMenuUI : BaseUI
     [SerializeField] private Button creditsBackButton;
     
     [Header("Windows")]
-    [SerializeField] private LobbyMenuUI lobbyUI;
-    [SerializeField] private Transform creditsUI;
+    [SerializeField] private Transform mainMenuWindow;
+    [SerializeField] private LobbyMenuUI lobbyMenuUI;
+    [SerializeField] private Transform creditsWindow;
     [Header("Cameras")]
     [SerializeField] private CinemachineVirtualCamera mainMenuCam;
     [SerializeField] private CinemachineVirtualCamera lobbyMenuCam;
@@ -34,32 +35,36 @@ public class MainMenuUI : BaseUI
     }
 
     private void HideWindows() {
-        creditsUI.gameObject.SetActive(false);
+        creditsWindow.gameObject.SetActive(false);
     }
 
     private void CreditsBackButton_OnClick() {
-        creditsUI.gameObject.SetActive(false);
+        creditsWindow.gameObject.SetActive(false);
         Show();
     }
 
     private void CreditsButton_OnClick() {
         Hide();
-        creditsUI.gameObject.SetActive(true);
+        creditsWindow.gameObject.SetActive(true);
     }
 
     private void StartGameButton_OnClick() {
         lobbyMenuCam.gameObject.SetActive(true);
         mainMenuCam.gameObject.SetActive(false);
         Hide();
-        lobbyUI.Show();
+        lobbyMenuUI.Show();
     }
 
     private void QuitGameButton_OnClick(){
         Application.Quit();
     }
 
-    public override void Hide() {
+    public void Show() {
         HideWindows();
-        base.Hide();
+        mainMenuWindow.gameObject.SetActive(true);
+    }
+
+    public void Hide(){
+        mainMenuWindow.gameObject.SetActive(false);
     }
 }

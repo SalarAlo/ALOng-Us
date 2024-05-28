@@ -8,7 +8,7 @@ using UnityEditor.VersionControl;
 using TMPro;
 using System;
 
-public class LobbyMenuUI : BaseUI
+public class LobbyMenuUI : MonoBehaviour
 {
     [Header("Prefabs")]
     [SerializeField] private SingleLobbyUI singleLobbyUIPrefab;
@@ -22,6 +22,7 @@ public class LobbyMenuUI : BaseUI
     [SerializeField] private Button quickJoinButton;
     
     [Header("Windows")]
+    [SerializeField] private Transform lobbyMenuUIWindow;
     [SerializeField] private Transform createLobbyWindow;
     [SerializeField] private Transform joinLobbyWindow;
     [SerializeField] private MainMenuUI mainMenu;
@@ -42,7 +43,15 @@ public class LobbyMenuUI : BaseUI
         refreshLobbiesButton.onClick.AddListener(RefreshLobbiesButton_OnClick);
         createLobbyButtonFinal.onClick.AddListener(CreateLobbyButtonFinal_OnClick);
         quickJoinButton.onClick.AddListener(QuickJoinButton_OnClick);
+
+        LobbyManager.Instance.OnFailOccured += LobbyManager_OnFailOccured;
+
         Hide();
+    }
+
+    private void LobbyManager_OnFailOccured(LobbyServiceException e) { 
+        HideWindows();
+        ErrorViewUI.Instance.RenderError(e.Message);
     }
 
     private void QuickJoinButton_OnClick() {
@@ -53,8 +62,12 @@ public class LobbyMenuUI : BaseUI
         string lobbyName = lobbyNameTextField.text;
         int maxPlayers = (int)playersAmountSlider.value;
         int imposters = (int)impostersAmountSlider.value;
-        // TODO: Render some error message using ui...
-        if (lobbyName == "") return;
+        
+        if(String.IsNullOrWhiteSpace(lobbyName) || lobbyName == "") {
+            HideWindows();
+            ErrorViewUI.Instance.RenderError("Lobby name shouldn't only consist of whitespaces");
+            return;
+        }
         
         LobbyManager.Instance.CreateLobbyAsync(lobbyName, maxPlayers, imposters);
         RefreshLobbiesList();
@@ -68,7 +81,7 @@ public class LobbyMenuUI : BaseUI
         try { 
             foreach (Transform child in lobbyParentUI) child.gameObject.SetActive(false);
 
-            List<Lobby> lobbies = await LobbyManager.Instance.QueryLobbies();
+            List<Lobby> lobbies = await LobbyManager.Instance.QueryJoinableLobbies();
             foreach (Lobby lobby in lobbies) {
                 SingleLobbyUI singleLobbyUI = Instantiate(singleLobbyUIPrefab, lobbyParentUI);
                 singleLobbyUI.SetLobby(lobby);
@@ -100,9 +113,13 @@ public class LobbyMenuUI : BaseUI
         Hide();
     }
 
-    public override void Show(){
-        base.Show();
+    public void Show(){
+        lobbyMenuUIWindow.gameObject.SetActive(true);
         HideWindows();
+    }
+
+    public void Hide() {
+        lobbyMenuUIWindow.gameObject.SetActive(false);
     }
 
 

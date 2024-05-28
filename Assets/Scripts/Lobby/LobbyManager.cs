@@ -12,6 +12,7 @@ using UnityEngine;
 public class LobbyManager : SingletonPersistent<LobbyManager> 
 {
     public Action<Lobby> OnLobbyJoined;
+    public Action<LobbyServiceException> OnFailOccured;
     private Lobby currentLobby;
     private const float HEARTBEAT_TIMER_MAX = 15;
     private float heartbeatTimer;
@@ -27,17 +28,17 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         } catch (LobbyServiceException e) {
-            Debug.Log(e.Message);
+            OnFailOccured?.Invoke(e);
         }
     }
 
-    public async void QuickJoinLobby(){
+    public async void QuickJoinLobby() {
         try {
             currentLobby = await Lobbies.Instance.QuickJoinLobbyAsync();
         } catch (LobbyServiceException e) {
-            Debug.Log(e.Message);
+            OnFailOccured?.Invoke(e);
         }
-    } 
+    }
 
     public async void CreateLobbyAsync(string name, int maxPlayers, int imposters) {
         try {
@@ -49,15 +50,20 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
             currentLobby = await Lobbies.Instance.CreateLobbyAsync(name, maxPlayers, options);
             OnLobbyJoined?.Invoke(currentLobby);
         } catch (LobbyServiceException e) {
-            Debug.Log(e.Message);
+            OnFailOccured?.Invoke(e);
         }
     }
 
-    public async Task<List<Lobby>> QueryLobbies() {
+    public async Task<List<Lobby>> QueryJoinableLobbies() {
         try {
-            return (await Lobbies.Instance.QueryLobbiesAsync()).Results;
+            QueryLobbiesOptions queryLobbiesOptions = new() {
+                Filters = new List<QueryFilter>() {
+                    new(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.NE)
+                }
+            };
+            return (await Lobbies.Instance.QueryLobbiesAsync(queryLobbiesOptions)).Results;
         } catch (LobbyServiceException e)  {
-            Debug.Log(e.Message);
+            OnFailOccured?.Invoke(e);
         }
         return null;
     }
@@ -75,7 +81,7 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
                 await Lobbies.Instance.SendHeartbeatPingAsync(currentLobby.Id);
             }
         } catch (LobbyServiceException e) {
-            Debug.Log(e.Message);
+            OnFailOccured?.Invoke(e);
         }
     }
 
@@ -86,7 +92,7 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
             currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
             OnLobbyJoined?.Invoke(currentLobby);
         } catch (LobbyServiceException e) {
-            Debug.Log(e.Message);
+            OnFailOccured?.Invoke(e);
         }
     }
 }
