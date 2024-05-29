@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : MonoBehaviour
+public class MainMenuUI : BaseUI
 {
     [Header("Buttons")]
     [SerializeField] private Button startGameButton;
@@ -15,28 +16,28 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button creditsBackButton;
     
     [Header("Windows")]
-    [SerializeField] private Transform mainMenuWindow;
     [SerializeField] private LobbyMenuUI lobbyMenuUI;
     [SerializeField] private Transform creditsWindow;
     [Header("Cameras")]
     [SerializeField] private CinemachineVirtualCamera mainMenuCam;
     [SerializeField] private CinemachineVirtualCamera lobbyMenuCam;
-    
-    // [Header("Config")]
 
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
+        
         quitGameButton.onClick.AddListener(QuitGameButton_OnClick);
         startGameButton.onClick.AddListener(StartGameButton_OnClick);
         creditsButton.onClick.AddListener(CreditsButton_OnClick);
         creditsBackButton.onClick.AddListener(CreditsBackButton_OnClick);
-        
-        HideWindows();
+        settingsButton.onClick.AddListener(SettingsButton_OnClick);   
+
         Show();
     }
 
-    private void HideWindows() {
-        creditsWindow.gameObject.SetActive(false);
+    private void SettingsButton_OnClick() {
+        SettingsUI.Instance.Show();
     }
+
 
     private void CreditsBackButton_OnClick() {
         creditsWindow.gameObject.SetActive(false);
@@ -57,14 +58,5 @@ public class MainMenuUI : MonoBehaviour
 
     private void QuitGameButton_OnClick(){
         Application.Quit();
-    }
-
-    public void Show() {
-        HideWindows();
-        mainMenuWindow.gameObject.SetActive(true);
-    }
-
-    public void Hide(){
-        mainMenuWindow.gameObject.SetActive(false);
     }
 }

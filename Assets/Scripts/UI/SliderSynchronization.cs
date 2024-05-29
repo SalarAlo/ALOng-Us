@@ -14,10 +14,20 @@ public class SliderSynchronization : MonoBehaviour
     }
 
     private void Start() {
+        SyncText();
         slider.onValueChanged.AddListener(Slider_OnValueChanged);
     }
 
-    private void Slider_OnValueChanged(float newVal) {
-        textToSync.text = ((int)newVal).ToString();
+    private void Slider_OnValueChanged(float _) {
+        SyncText();
+    }
+
+    private void SyncText(){
+        
+        if (slider.wholeNumbers){
+            textToSync.text = slider.value.ToString();
+        } else {
+            textToSync.text = slider.value.ToString("0.00");
+        }
     }
 }

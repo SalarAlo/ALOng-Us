@@ -5,10 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class CreateLobbyMenuUI : MonoBehaviour
+public class CreateLobbyMenuUI : BaseUI
 {
     [Header("Configuration")]
-    [SerializeField] private Transform createLobbyWindow;
     [SerializeField] private Button createLobbyButton;
 
     [Header("Create Lobby Options")]
@@ -18,16 +17,6 @@ public class CreateLobbyMenuUI : MonoBehaviour
 
     private void Start() {
         createLobbyButton.onClick.AddListener(CreateLobbyButton_OnClick);
-
-        Hide();
-    }
-
-    public void Show() {
-        createLobbyWindow.gameObject.SetActive(true);
-    }
-
-    public void Hide() {
-        createLobbyWindow.gameObject.SetActive(false);
     }
 
     private void CreateLobbyButton_OnClick(){

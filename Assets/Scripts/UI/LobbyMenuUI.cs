@@ -8,7 +8,7 @@ using UnityEditor.VersionControl;
 using TMPro;
 using System;
 
-public class LobbyMenuUI : MonoBehaviour
+public class LobbyMenuUI : BaseUI
 {
 
     [Header("Buttons")]
@@ -18,7 +18,6 @@ public class LobbyMenuUI : MonoBehaviour
     [SerializeField] private Button backToMainMenuButton;
     
     [Header("Windows")]
-    [SerializeField] private Transform lobbyMenuUIWindow;
     [SerializeField] private CreateLobbyMenuUI createLobbyUI;
     [SerializeField] private JoinLobbyUI joinLobbyUI;
     [SerializeField] private MainMenuUI mainMenu;
@@ -33,8 +32,6 @@ public class LobbyMenuUI : MonoBehaviour
         backToMainMenuButton.onClick.AddListener(BackToMainMenuButton_OnClick);
 
         LobbyManager.Instance.OnFailOccured += LobbyManager_OnFailOccured;
-
-        Hide();
     }
 
     private void LobbyManager_OnFailOccured(LobbyServiceException e) { 
@@ -68,12 +65,9 @@ public class LobbyMenuUI : MonoBehaviour
         Hide();
     }
 
-    public void Show(){
-        lobbyMenuUIWindow.gameObject.SetActive(true);
+    public override void Show(){
+        base.Show();
         HideWindows();
     }
 
-    public void Hide() {
-        lobbyMenuUIWindow.gameObject.SetActive(false);
-    }
 }

@@ -19,4 +19,6 @@ public class SingleAudioSource : MonoBehaviour
         if(audioSource.isPlaying) return;
         Destroy(gameObject, .1f);
     }
+
+    public AudioSource GetAudioSource() => audioSource;
 }

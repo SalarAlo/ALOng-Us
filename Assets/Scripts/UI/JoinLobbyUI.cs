@@ -5,14 +5,13 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JoinLobbyUI : MonoBehaviour
+public class JoinLobbyUI : BaseUI
 {
 
     [Header("Prefabs")]
     [SerializeField] private SingleLobbyUI singleLobbyUIPrefab;
 
     [Header("Configuration")]
-    [SerializeField] private Transform joinLobbyWindow;
     [SerializeField] private Transform lobbyParentUI;
     [SerializeField] private Button refreshLobbiesButton;
 
@@ -38,7 +37,4 @@ public class JoinLobbyUI : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
-
-    public void Hide() => joinLobbyWindow.gameObject.SetActive(false);
-    public void Show() => joinLobbyWindow.gameObject.SetActive(true);
 }
