@@ -43,7 +43,7 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
     public async void CreateLobbyAsync(string name, int maxPlayers, int imposters) {
         try {
             CreateLobbyOptions options = new(){
-                Data = new Dictionary<string, DataObject>() {
+                Data = new() {
                     { "imposters", new DataObject(DataObject.VisibilityOptions.Public, imposters.ToString()) }
                 }
             };

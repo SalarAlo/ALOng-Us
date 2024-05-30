@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class CreateLobbyMenuUI : BaseUI
+public class CreateLobbyMenuUI : BaseUISingleton<CreateLobbyMenuUI>
 {
     [Header("Configuration")]
     [SerializeField] private Button createLobbyButton;

@@ -5,7 +5,7 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JoinLobbyUI : BaseUI
+public class JoinLobbyUI : BaseUISingleton<JoinLobbyUI>
 {
 
     [Header("Prefabs")]

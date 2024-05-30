@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : BaseUI
+public class MainMenuUI : BaseUISingleton<MainMenuUI>
 {
     [Header("Buttons")]
     [SerializeField] private Button startGameButton;
@@ -16,22 +16,19 @@ public class MainMenuUI : BaseUI
     [SerializeField] private Button creditsBackButton;
     
     [Header("Windows")]
-    [SerializeField] private LobbyMenuUI lobbyMenuUI;
     [SerializeField] private Transform creditsWindow;
     [Header("Cameras")]
     [SerializeField] private CinemachineVirtualCamera mainMenuCam;
     [SerializeField] private CinemachineVirtualCamera lobbyMenuCam;
-
-    protected override void Awake() {
+    
+    public override void Awake() {
         base.Awake();
-        
+
         quitGameButton.onClick.AddListener(QuitGameButton_OnClick);
         startGameButton.onClick.AddListener(StartGameButton_OnClick);
         creditsButton.onClick.AddListener(CreditsButton_OnClick);
         creditsBackButton.onClick.AddListener(CreditsBackButton_OnClick);
-        settingsButton.onClick.AddListener(SettingsButton_OnClick);   
-
-        Show();
+        settingsButton.onClick.AddListener(SettingsButton_OnClick);
     }
 
     private void SettingsButton_OnClick() {
@@ -53,7 +50,7 @@ public class MainMenuUI : BaseUI
         lobbyMenuCam.gameObject.SetActive(true);
         mainMenuCam.gameObject.SetActive(false);
         Hide();
-        lobbyMenuUI.Show();
+        LobbyMenuUI.Instance.Show();
     }
 
     private void QuitGameButton_OnClick(){

@@ -8,7 +8,7 @@ using UnityEditor.VersionControl;
 using TMPro;
 using System;
 
-public class LobbyMenuUI : BaseUI
+public class LobbyMenuUI : BaseUISingleton<LobbyMenuUI>
 {
 
     [Header("Buttons")]
@@ -16,11 +16,6 @@ public class LobbyMenuUI : BaseUI
     [SerializeField] private Button joinLobbyButton;
     [SerializeField] private Button quickJoinButton;
     [SerializeField] private Button backToMainMenuButton;
-    
-    [Header("Windows")]
-    [SerializeField] private CreateLobbyMenuUI createLobbyUI;
-    [SerializeField] private JoinLobbyUI joinLobbyUI;
-    [SerializeField] private MainMenuUI mainMenu;
     [Header("Cameras")]
     [SerializeField] private CinemachineVirtualCamera mainMenuCam;
     [SerializeField] private CinemachineVirtualCamera lobbyMenuCam;
@@ -44,24 +39,24 @@ public class LobbyMenuUI : BaseUI
     }
 
     private void HideWindows() {
-        createLobbyUI.Hide();
-        joinLobbyUI.Hide();
+        CreateLobbyMenuUI.Instance.Hide();
+        JoinLobbyUI.Instance.Hide();
     }
 
     private void CreateLobbyButton_OnClick() {
         HideWindows();
-        createLobbyUI.Show();
+        CreateLobbyMenuUI.Instance.Show();
     }
     
     private void JoinLobbyButton_OnClick() {
         HideWindows();
-        joinLobbyUI.Show();
+        JoinLobbyUI.Instance.Show();
     }
 
     private void BackToMainMenuButton_OnClick() {
         mainMenuCam.gameObject.SetActive(true);
         lobbyMenuCam.gameObject.SetActive(true);
-        mainMenu.Show();
+        MainMenuUI.Instance.Show();
         Hide();
     }
 
