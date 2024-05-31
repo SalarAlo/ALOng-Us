@@ -38,6 +38,7 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
     public async void QuickJoinLobby() {
         try {
             currentLobby = await Lobbies.Instance.QuickJoinLobbyAsync();
+            OnLobbyJoined?.Invoke(currentLobby);
         } catch (LobbyServiceException e) {
             OnFailOccured?.Invoke(e);
         }

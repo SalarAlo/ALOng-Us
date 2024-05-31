@@ -1,23 +1,44 @@
 using System;
+using System.Collections.Generic;
 using Unity;
 using Unity.Collections;
+using Unity.Mathematics;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
 {
-    public Action OnPlayerDataListLengthChanged;
-    public Action OnAnyPlayerColorChanged;
+    public const int MAX_PLAYERS_PER_LOBBY = 10;
+    public Action OnPlayerDataListChanged;
+    public Action OnColorAvaiabilityListChanged;
     
     public NetworkList<PlayerData> networkedPlayerDataList;
+    public NetworkList<bool> networkedAvaibleColorList;
     private string playerName = "";
 
     public override void Awake() {
-        base.Awake();
-
+        base.Awake();   
         networkedPlayerDataList = new();
+        networkedAvaibleColorList = new() ;
         networkedPlayerDataList.OnListChanged += NetworkedPlayerDataList_OnListChanged;
+        
+    }
+
+    public override void OnNetworkSpawn() {
+        if (networkedAvaibleColorList.Count == 0) {
+            Debug.Log("Initialiing List");
+            InitNetworkedAvaiableColorIndexListServerRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InitNetworkedAvaiableColorIndexListServerRpc() {
+        Debug.Log("Salars Brain is slowly melting");
+        for (int i = 0; i < MAX_PLAYERS_PER_LOBBY; i++) {
+            networkedAvaibleColorList.Add(true);
+            Debug.Log("color with index " + i + " is " + (networkedAvaibleColorList[i] ? "avaiable" : "not avaiable"));
+        }
     }
 
     private void Start() {
@@ -31,33 +52,50 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetColorOfClientServerRpc(ulong clientId, int colorIndex) {
+    private void SetColorOfClientServerRpc(ulong clientId, int newColorIndex) {
+        if(!IsColorAvaible(newColorIndex)) return;
+
         for(int i = 0; i < networkedPlayerDataList.Count; i++) {
             PlayerData playerData = networkedPlayerDataList[i];
+            int previousColorIndex = playerData.colorIndex;
             if (playerData.clientId == clientId) {
-                playerData.colorIndex = colorIndex;
+                networkedAvaibleColorList[previousColorIndex] = true;
+                networkedAvaibleColorList[newColorIndex] = false;
+                
+                playerData.colorIndex = newColorIndex;
                 networkedPlayerDataList[i] = playerData;
                 return;
             }
         }
-        ClientColorChangedClientRpc();
     }
 
-    [ClientRpc]
-    private void ClientColorChangedClientRpc() {
-        OnAnyPlayerColorChanged?.Invoke();
+    public PlayerData GetLocalPlayerData(){ 
+        foreach(var playerData in networkedPlayerDataList) {
+            if (playerData.clientId == NetworkManager.LocalClientId) return playerData;
+        }
+        return default;
     }
+
+    public bool IsColorAvaible(int colorIndex) {
+        return networkedAvaibleColorList[colorIndex];
+    }
+    
+    public int GetAvaiableColorIndex() {
+        for (int i = 0; i < MAX_PLAYERS_PER_LOBBY; i++) {
+            if (IsColorAvaible(i)) return i;
+        }
+
+        return -1;
+    }
+
 
     private void NetworkManager_OnServerStarted() {
-        Debug.Log("Now the server has started");
-        // This player is the host so we first register this player
         RegisterPlayer(OwnerClientId);
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
     }
 
     private void NetworkedPlayerDataList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
-        Debug.Log("Triggering Network Player Data change event");
-        OnPlayerDataListLengthChanged?.Invoke();
+        OnPlayerDataListChanged?.Invoke();
     }
 
 
@@ -67,13 +105,18 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     }
 
     private void RegisterPlayer(ulong clientId) {
+        Debug.Log("Registering Client...");
+        int avaiableColorIndex = GetAvaiableColorIndex();
         networkedPlayerDataList.Add(new() {
             clientId = clientId,
             playerName = playerName,
+            colorIndex = avaiableColorIndex
         });
+        networkedAvaibleColorList[avaiableColorIndex] = false;
     }
 
     private void LobbyManager_OnLobbyJoined(Lobby lobby) {
+        // Error must be here
         if (LobbyManager.Instance.IsLobbyHost()) {
             Loader.Instance.LoadScene(Loader.Scene.CharacterSelectionScene);
             StartHost();
@@ -85,9 +128,9 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     private void StartHost() {
         NetworkManager.StartHost();
     }
-    
+
     private void StartClient() {
-        NetworkManager.StartClient();
+        NetworkManager.Singleton.StartClient();
     }
 
     private void NameMenuUI_OnNameSet(string playerName) => this.playerName = playerName;

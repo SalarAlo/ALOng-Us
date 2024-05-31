@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterSelection : SingletonNetwork<CharacterSelection>
 {
@@ -19,10 +20,9 @@ public class CharacterSelection : SingletonNetwork<CharacterSelection>
     }
 
     private void Start() {
+        AlongUsMultiplayer.Instance.OnPlayerDataListChanged += AlongUsMultiplayer_OnPlayerDataListChanged;
         UpdatePlayers();
-        
-        AlongUsMultiplayer.Instance.OnPlayerDataListLengthChanged += AlongUsMultiplayer_OnPlayerDataListLengthChanged;
-        AlongUsMultiplayer.Instance.OnAnyPlayerColorChanged += AlongUsMultiplayer_OnAnyPlayerColorChanged;
+        UpdateButtons();
     }
 
     private void InstantiateColorSelectionButtons(){
@@ -31,20 +31,21 @@ public class CharacterSelection : SingletonNetwork<CharacterSelection>
             colorSelectionButton.SetColor(i);
         }
     }
-    
-    private void AlongUsMultiplayer_OnAnyPlayerColorChanged() {
+    private void AlongUsMultiplayer_OnPlayerDataListChanged() {
         UpdatePlayers();
-    }
-
-
-    private void AlongUsMultiplayer_OnPlayerDataListLengthChanged() {
-        UpdatePlayers();
+        UpdateButtons();
     }
 
     public Color GetColorAtIndex(int index){
         return chosableColors[index];
     }
 
+    private void UpdateButtons() {
+        foreach (Transform colorButtonTransform in colorButtonsParent) {
+            CharacterColorSelectionButton colorButtonColorSelectionComponent = colorButtonTransform.GetComponent<CharacterColorSelectionButton>();
+            colorButtonColorSelectionComponent.UpdateButtonAvaiability();
+        }
+    }
 
     private void UpdatePlayers(){
         // Clear every playerPos so that no playerPos is occupied
