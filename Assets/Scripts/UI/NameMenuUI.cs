@@ -20,7 +20,15 @@ public class NameMenuUI : BaseUISingleton<NameMenuUI>
     }
 
     private void Start() {
-        readyButton.onClick.AddListener(ReadyButton_OnClick);
+
+        if(AlongUsMultiplayer.Instance.GetPlayerName() != "") {
+            MainMenuUI.Instance.Show();
+            nameCam.gameObject.SetActive(false);
+            MainMenuUI.Instance.Show();
+            Hide();
+        } else {
+            readyButton.onClick.AddListener(ReadyButton_OnClick);
+        }
     }
 
     private void ReadyButton_OnClick(){

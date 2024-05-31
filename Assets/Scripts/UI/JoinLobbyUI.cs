@@ -13,18 +13,9 @@ public class JoinLobbyUI : BaseUISingleton<JoinLobbyUI>
 
     [Header("Configuration")]
     [SerializeField] private Transform lobbyParentUI;
-    [SerializeField] private Button refreshLobbiesButton;
 
 
-    private void Start() {
-        refreshLobbiesButton.onClick.AddListener(RefreshLobbiesButton_OnClick);
-    }
-
-    private void RefreshLobbiesButton_OnClick() {
-        RefreshLobbiesList();
-    }
-
-    private async void RefreshLobbiesList(){
+    public async void RefreshLobbiesList(){
         try { 
             foreach (Transform child in lobbyParentUI) child.gameObject.SetActive(false);
 

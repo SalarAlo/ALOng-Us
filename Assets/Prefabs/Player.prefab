@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 6027860309460916960}
   - component: {fileID: 6758580990122325970}
   m_Layer: 0
-  m_Name: head_neutral_NPC
+  m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -650,7 +650,7 @@ GameObject:
   - component: {fileID: 4588466674226044829}
   - component: {fileID: 2516424288351934619}
   m_Layer: 0
-  m_Name: body_NPC
+  m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1612,6 +1612,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8296219795588500570}
+  - component: {fileID: 6525397854980552708}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1637,6 +1638,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6525397854980552708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8676685365730186976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e388034dae5bad14b92f3b4470de58da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyParts:
+  - {fileID: 2516424288351934619}
+  - {fileID: 6758580990122325970}
 --- !u!1 &8770809630217794441
 GameObject:
   m_ObjectHideFlags: 0

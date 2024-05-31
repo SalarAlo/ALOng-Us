@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CharacterSelectPlayerPosition : MonoBehaviour
 {
-    private PlayerData childPlayerData;
-    [SerializeField] private Transform playerPrefab;
+    [SerializeField] private PlayerVisuals playerPrefab;
+    private PlayerData playerData;
 
     public void PopulateWithPlayer(PlayerData playerData) {
-        childPlayerData = playerData;
-        Instantiate(playerPrefab, transform);
+        this.playerData = playerData;
+        var player = Instantiate(playerPrefab, transform);
+        player.SetColorTo(CharacterSelection.Instance.GetColorAtIndex(playerData.colorIndex));
     }
     
     public void Clear(){
         if (transform.childCount >= 1)
             Destroy(transform.GetChild(0).gameObject);
-        childPlayerData = new();
     }
+    
     public bool IsEmpty() => transform.childCount == 0;
+
+    public bool IsOccupiedBy(ulong clientId) => !IsEmpty() && playerData.clientId == clientId;
 }

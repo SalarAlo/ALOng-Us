@@ -7,7 +7,9 @@ using UnityEngine;
 
 public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
 {
-    public Action OnNetworkedPlayerDataListChanged;
+    public Action OnPlayerDataListLengthChanged;
+    public Action OnAnyPlayerColorChanged;
+    
     public NetworkList<PlayerData> networkedPlayerDataList;
     private string playerName = "";
 
@@ -24,20 +26,42 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         NameMenuUI.Instance.OnNameSet += NameMenuUI_OnNameSet;
     }
 
+    public void SetColorOfLocalClient(int colorIndex) {
+        SetColorOfClientServerRpc(NetworkManager.Singleton.LocalClientId, colorIndex);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetColorOfClientServerRpc(ulong clientId, int colorIndex) {
+        for(int i = 0; i < networkedPlayerDataList.Count; i++) {
+            PlayerData playerData = networkedPlayerDataList[i];
+            if (playerData.clientId == clientId) {
+                playerData.colorIndex = colorIndex;
+                networkedPlayerDataList[i] = playerData;
+                ClientColorChangedClientRpc();
+                return;
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void ClientColorChangedClientRpc() {
+        OnAnyPlayerColorChanged?.Invoke();
+    }
+
     private void NetworkManager_OnServerStarted() {
         Debug.Log("Now the server has started");
         // This player is the host so we first register this player
         RegisterPlayer(OwnerClientId);
-        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientJoined;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
     }
 
     private void NetworkedPlayerDataList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
         Debug.Log("Triggering Network Player Data change event");
-        OnNetworkedPlayerDataListChanged?.Invoke();
+        OnPlayerDataListLengthChanged?.Invoke();
     }
 
 
-    private void NetworkManager_OnClientJoined(ulong clientId) {
+    private void NetworkManager_OnClientConnectedCallback(ulong clientId) {
         Debug.Log("Adding a new player to the List");
         RegisterPlayer(clientId);
     }
@@ -73,16 +97,19 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
 public struct PlayerData : INetworkSerializable, IEquatable<PlayerData> {
         public ulong clientId;
         public FixedString64Bytes playerName;
+        public int colorIndex;
 
         public bool Equals(PlayerData other)
         {
             return clientId == other.clientId && 
-                other.playerName == playerName;
+                other.playerName == playerName && 
+                other.colorIndex == colorIndex;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref clientId);
             serializer.SerializeValue(ref playerName);
+            serializer.SerializeValue(ref colorIndex);
         }
     }

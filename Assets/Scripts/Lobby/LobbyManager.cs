@@ -14,13 +14,16 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
     public Action<Lobby> OnLobbyJoined;
     public Action<LobbyServiceException> OnFailOccured;
     private Lobby currentLobby;
-    private const float HEARTBEAT_TIMER_MAX = 15;
+    private const float HEARTBEAT_INTERVAL = 15;
+    private const float LOBBY_RELOAD_INTERVAL = 3;
     private float heartbeatTimer;
+    private float lobbyReloadTimer;
 
     public override void Awake() {
         base.Awake();
         InitializeServices();
-        heartbeatTimer = HEARTBEAT_TIMER_MAX;
+        heartbeatTimer = HEARTBEAT_INTERVAL;
+        lobbyReloadTimer = LOBBY_RELOAD_INTERVAL;
     }
 
     private async void InitializeServices(){
@@ -70,6 +73,17 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
 
     private void Update() {
         HandleLobbyHeartbeat();
+        HandleLobbyReload();
+    }
+
+    private void HandleLobbyReload(){
+        if (JoinLobbyUI.Instance == null) return;
+
+        lobbyReloadTimer -= Time.deltaTime;
+        if (lobbyReloadTimer <= 0) {
+            lobbyReloadTimer = LOBBY_RELOAD_INTERVAL;
+            JoinLobbyUI.Instance.RefreshLobbiesList();
+        }
     }
 
     private async void HandleLobbyHeartbeat(){
@@ -77,7 +91,7 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
             if (!IsLobbyHost()) return;
             heartbeatTimer -= Time.deltaTime;
             if (heartbeatTimer <= 0) {
-                heartbeatTimer = HEARTBEAT_TIMER_MAX;
+                heartbeatTimer = HEARTBEAT_INTERVAL;
                 await Lobbies.Instance.SendHeartbeatPingAsync(currentLobby.Id);
             }
         } catch (LobbyServiceException e) {
