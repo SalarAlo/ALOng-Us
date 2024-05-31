@@ -37,10 +37,10 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
             if (playerData.clientId == clientId) {
                 playerData.colorIndex = colorIndex;
                 networkedPlayerDataList[i] = playerData;
-                ClientColorChangedClientRpc();
                 return;
             }
         }
+        ClientColorChangedClientRpc();
     }
 
     [ClientRpc]

@@ -12,7 +12,6 @@ public class CharacterSelection : SingletonNetwork<CharacterSelection>
     [SerializeField] private Transform colorButtonsParent;
     [SerializeField] private CharacterColorSelectionButton colorSelectionButtonPrefab;
     [SerializeField] private Color[] chosableColors;
-    private CharacterSelectPlayerPosition ownPlayerPos;
 
     public override void Awake() {
         base.Awake();
@@ -53,15 +52,9 @@ public class CharacterSelection : SingletonNetwork<CharacterSelection>
             playerPos.Clear();
 
         // iterate over each connected client data 
-        for (int i = 0; i < AlongUsMultiplayer.Instance.networkedPlayerDataList.Count; i++){ 
+        for (int i = 0; i < AlongUsMultiplayer.Instance.networkedPlayerDataList.Count; i++){
             PlayerData playerData = AlongUsMultiplayer.Instance.networkedPlayerDataList[i];
-            CharacterSelectPlayerPosition playerPosition = playerPositions[i];
-            // if the client data is the data of the local client populate the playerPos with the same index as this client data
-            // with the client.
-            if (NetworkManager.Singleton.LocalClientId == playerData.clientId) {
-                playerPosition.PopulateWithPlayer(playerData);
-                ownPlayerPos = playerPosition;
-            }
+            playerPositions[i].PopulateWithPlayer(playerData);
         }
     }
 
