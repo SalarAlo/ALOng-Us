@@ -18,6 +18,7 @@ public class PatrolTravel : MonoBehaviour
     private int currentPatrolIndex = 0;
     private bool isWaiting = false; // Flag to track if the patrol is waiting
     private float waitTimer = 0f; // Timer for waiting
+    private bool travelingForwards = true;
 
     private const float patrolPointReachDistance = 1f;
 
@@ -82,7 +83,17 @@ public class PatrolTravel : MonoBehaviour
     }
 
     private void SetDestinationPatrolPoint() {
-        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+        if (travelingForwards) {
+            currentPatrolIndex = currentPatrolIndex + 1;
+            if(currentPatrolIndex == patrolPoints.Length-1){
+                travelingForwards = false;
+            }
+        } else {
+            currentPatrolIndex = currentPatrolIndex - 1;
+            if(currentPatrolIndex == 0){
+                travelingForwards = true;
+            }
+        }
         destinationPatrolPoint = patrolPoints[currentPatrolIndex];
     }
 }

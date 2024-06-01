@@ -20,7 +20,6 @@ public class NameMenuUI : BaseUISingleton<NameMenuUI>
     }
 
     private void Start() {
-
         if(AlongUsMultiplayer.Instance.GetPlayerName() != "") {
             MainMenuUI.Instance.Show();
             nameCam.gameObject.SetActive(false);

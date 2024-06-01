@@ -6,17 +6,12 @@ using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class CharacterSelection : SingletonNetwork<CharacterSelection>
 {
     [SerializeField] private CharacterSelectPlayerPosition[] playerPositions;
-    [SerializeField] private Transform colorButtonsParent;
-    [SerializeField] private CharacterColorSelectionButton colorSelectionButtonPrefab;
-    [SerializeField] private Color[] chosableColors;
 
     public override void Awake() {
         base.Awake();
-        InstantiateColorSelectionButtons();
     }
 
     private void Start() {
@@ -25,23 +20,13 @@ public class CharacterSelection : SingletonNetwork<CharacterSelection>
         UpdateButtons();
     }
 
-    private void InstantiateColorSelectionButtons(){
-        for(int i = 0; i < chosableColors.Length; i++) {
-            CharacterColorSelectionButton colorSelectionButton = Instantiate(colorSelectionButtonPrefab, colorButtonsParent);
-            colorSelectionButton.SetColor(i);
-        }
-    }
     private void AlongUsMultiplayer_OnPlayerDataListChanged() {
         UpdatePlayers();
         UpdateButtons();
     }
 
-    public Color GetColorAtIndex(int index){
-        return chosableColors[index];
-    }
-
     private void UpdateButtons() {
-        foreach (Transform colorButtonTransform in colorButtonsParent) {
+        foreach (Transform colorButtonTransform in ColorSelectionManager.Instance.GetColorButtonsParent()) {
             CharacterColorSelectionButton colorButtonColorSelectionComponent = colorButtonTransform.GetComponent<CharacterColorSelectionButton>();
             colorButtonColorSelectionComponent.UpdateButtonAvaiability();
         }

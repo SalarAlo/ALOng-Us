@@ -20,7 +20,7 @@ public class CharacterColorSelectionButton : MonoBehaviour
     }
     public void SetColor(int colorIndex) {
         this.colorIndex = colorIndex;
-        image.color = CharacterSelection.Instance.GetColorAtIndex(colorIndex);
+        image.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
         button.onClick.AddListener(Button_OnClick);
     }
 
@@ -37,7 +37,7 @@ public class CharacterColorSelectionButton : MonoBehaviour
             SetUnselected();
         }
 
-        if (AlongUsMultiplayer.Instance.IsColorAvaible(colorIndex)) {
+        if (ColorSelectionManager.Instance.IsColorAvaible(colorIndex)) {
             SetAvaible();
         } else {
             SetUnavaible();
@@ -53,6 +53,6 @@ public class CharacterColorSelectionButton : MonoBehaviour
     public void SetUnselected() => selectedGameObject.SetActive(false);
     public int GetColorIndex() => colorIndex;
     private void Button_OnClick() {
-        AlongUsMultiplayer.Instance.SetColorOfLocalClient(colorIndex);
+        ColorSelectionManager.Instance.SetColorOfLocalClient(colorIndex);
     }
 }
