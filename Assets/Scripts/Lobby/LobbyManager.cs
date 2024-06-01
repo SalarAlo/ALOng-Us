@@ -12,6 +12,7 @@ using UnityEngine;
 public class LobbyManager : SingletonPersistent<LobbyManager> 
 {
     public Action<Lobby> OnLobbyJoined;
+    public Action OnLobbyLeft;
     public Action<LobbyServiceException> OnFailOccured;
     private Lobby currentLobby;
     private const float HEARTBEAT_INTERVAL = 15;
@@ -24,6 +25,16 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
         InitializeServices();
         heartbeatTimer = HEARTBEAT_INTERVAL;
         lobbyReloadTimer = LOBBY_RELOAD_INTERVAL;
+    }
+
+    public async void KickPlayerFromCurrentLobbyAsync(string clientId){
+        try {
+            if (currentLobby == null) return;
+            await Lobbies.Instance.RemovePlayerAsync(currentLobby.Id, clientId);
+            OnLobbyLeft?.Invoke();
+        } catch (LobbyServiceException e) {
+            OnFailOccured?.Invoke(e);
+        }
     }
 
     private async void InitializeServices(){

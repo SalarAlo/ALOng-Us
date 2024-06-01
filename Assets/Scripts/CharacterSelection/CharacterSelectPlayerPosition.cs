@@ -12,7 +12,7 @@ public class CharacterSelectPlayerPosition : MonoBehaviour
         this.playerData = playerData;
         var player = Instantiate(playerPrefab, transform);
         player.SetColorTo(ColorSelectionManager.Instance.GetColorAtIndex(playerData.colorIndex));
-        player.GetComponent<CharacterSelectionPlayer>().SetName(playerData.playerName.ToString());
+        player.GetComponent<CharacterSelectionPlayer>().SetClient(playerData);
     }
     
     public void Clear(){

@@ -16,6 +16,11 @@ public class Loader : SingletonPersistent<Loader>
 
     private void Start() {
         SceneManager.activeSceneChanged += SceneManager_ActiveSceneChanged;
+        LobbyManager.Instance.OnLobbyLeft += LobbyManager_OnLobbyLeft;
+    }
+
+    private void LobbyManager_OnLobbyLeft() {
+        LoadScene(Scene.MainMenuScene);
     }
 
     private void SceneManager_ActiveSceneChanged(UnityEngine.SceneManagement.Scene arg0, UnityEngine.SceneManagement.Scene newScene) {
