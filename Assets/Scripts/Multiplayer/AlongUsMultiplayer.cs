@@ -21,9 +21,9 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     }
 
     private void Start() {
-        NetworkManager.Singleton.OnServerStarted += NetworkManager_OnServerStarted;
         LobbyManager.Instance.OnLobbyJoined += LobbyManager_OnLobbyJoined;
         NameMenuUI.Instance.OnNameSet += NameMenuUI_OnNameSet;
+        NetworkManager.Singleton.OnServerStarted += NetworkManager_OnServerStarted;
     }
 
     public void SetColorOfPlayer(ulong clientId, int colorIndex){
@@ -44,21 +44,55 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         return default;
     }
 
+    [ClientRpc]
+    private void RegisterPlayerClientRpc(ClientRpcParams clientRpcReceiveParams = default) {
+        RegisterPlayerServerRpc(playerName);
+    }
 
-    private void RegisterPlayer(ulong clientId) {
+    [ServerRpc(RequireOwnership = false)]
+    private void RegisterPlayerServerRpc(string playerName, ServerRpcParams serverRpcParams = default){
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
         int avaiableColorIndex = ColorSelectionManager.Instance.GetAvaiableColorIndex();
+        
         networkedPlayerDataList.Add(new() {
             clientId = clientId,
             playerName = playerName,
             colorIndex = avaiableColorIndex
         });
+        
         ColorSelectionManager.Instance.SetColorInavaiable(avaiableColorIndex);
     }
 
+    private void UnregisterPlayer(ulong clientId) {
+        PlayerData playerData = default; 
+        int i;
+        for(i = 0; i < networkedPlayerDataList.Count; i++) {
+            var data = networkedPlayerDataList[i];
+            if(data.clientId == clientId) {
+                playerData = data;
+                break;
+            }
+        }
+        ColorSelectionManager.Instance.SetColorAvaiable(playerData.colorIndex);
+        networkedPlayerDataList.RemoveAt(i);
+    }
 
+
+    // Only invoked on the server bc. OnServerStarted is only invoked on server
     private void NetworkManager_OnServerStarted() {
-        RegisterPlayer(OwnerClientId);
+        ClientRpcParams clientRpcParams = new() {
+                Send = new ClientRpcSendParams() { 
+                    TargetClientIds = new List<ulong>() {
+                        OwnerClientId
+                    }
+                }
+        };
+
+        RegisterPlayerClientRpc(
+            clientRpcParams
+        );
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
     }
 
     private void NetworkedPlayerDataList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
@@ -66,8 +100,22 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     }
 
     private void NetworkManager_OnClientConnectedCallback(ulong clientId) {
-        RegisterPlayer(clientId);
+        ClientRpcParams clientRpcParams = new() {
+                Send = new ClientRpcSendParams() { 
+                    TargetClientIds = new List<ulong>() {
+                        clientId
+                    }
+                }
+        };
+        RegisterPlayerClientRpc(
+            clientRpcParams
+        );
     }
+    
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
+        UnregisterPlayer(clientId);
+    }
+
     private void LobbyManager_OnLobbyJoined(Lobby lobby) {
         Loader.Instance.LoadScene(Loader.Scene.CharacterSelectionScene);
         Loader.Instance.OnSceneChanged += Loader_OnSceneChanged;

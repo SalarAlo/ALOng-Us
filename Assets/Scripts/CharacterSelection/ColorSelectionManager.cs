@@ -79,4 +79,8 @@ public class ColorSelectionManager : SingletonNetwork<ColorSelectionManager>
     public void SetColorInavaiable(int colorIndex) {
         networkedAvaibleColorList[colorIndex] = false;
     }
+
+    public void SetColorAvaiable(int colorIndex) {
+        networkedAvaibleColorList[colorIndex] = true;
+    } 
 }
