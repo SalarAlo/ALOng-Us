@@ -8,7 +8,4 @@ TODO'S:
   <li>
     Pretty much the entire game logic for the actual game.
   </li>
-  <li>
-    Make sure the player sees the rocket in main menu
-  </li>
 </ul>
