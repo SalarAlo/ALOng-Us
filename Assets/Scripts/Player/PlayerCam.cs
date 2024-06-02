@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCam : MonoBehaviour
+public class PlayerCam : Singleton<PlayerCam>
 {
     [SerializeField] private float sensX;
     [SerializeField] private float sensY;
     [SerializeField] private Transform  orientation;
     private float xRot;
     private float yRot;
+
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    private void Update() {
+    private void LateUpdate() {
+        if (!orientation) return;
+
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
         
@@ -25,5 +26,9 @@ public class PlayerCam : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(xRot, yRot, 0);
         orientation.rotation = Quaternion.Euler(0, yRot, 0);
+    }
+
+    public void SetOrientation(Transform orientation) {
+        this.orientation = orientation;
     }
 }

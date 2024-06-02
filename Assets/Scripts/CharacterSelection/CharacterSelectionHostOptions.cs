@@ -20,5 +20,6 @@ public class CharacterSelectionHostOptions : NetworkBehaviour
 
     private void StartGameButton_OnClick() {
         // TODO: START THE GAME
+        Loader.Instance.LoadSceneNetworked(Loader.Scene.GameScene);
     }
 }

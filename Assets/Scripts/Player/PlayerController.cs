@@ -5,47 +5,53 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerController : NetworkBehaviour
-{   
+public class PlayerController : NetworkBehaviour {   
     [SerializeField] private float movementSpeed;
     [SerializeField] private Transform orientation;
+    [SerializeField] private Transform cameraPos;
     [SerializeField] private Transform visuals;
 
-    public static PlayerController LocalInstance;
+    public static PlayerController LocalInstance = null;
     private Rigidbody rb;
+
     private Vector2 movementInput;
     private Vector3 movementDir;
 
     private void Awake() {
-        LocalInstance = this;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        DeactivateLocalVisuals();
     }
-    private void DeactivateLocalVisuals(){
-        if(LocalInstance == this) {
-            foreach (Transform child in visuals){
-                child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
+
+    private void Start() {
+        rb.isKinematic = false;
+
+        if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
+            if (PlayerController.LocalInstance != null) {
+                Destroy(gameObject);
+                Debug.LogError("There are more then one Local Player Instances");
             }
+
+            LocalInstance = this;
+            Debug.Log(name+" is the local instance");
+
+            PlayerCam.Instance.SetOrientation(orientation);
+            PlayerMoveCam.Instance.SetCameraPosition(cameraPos);
+
+            DeactivateLocalVisuals();
         }
     }
 
-    // public override void OnNetworkSpawn() {
-        // if (LocalInstance != null) {
-            // Destroy(gameObject);
-            // Debug.LogError("There are more then one Local Player Instances");
-        // }
-// 
-        // if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
-            // LocalInstance = this;
-        // }
-    // }
+    private void DeactivateLocalVisuals(){
+        foreach (Transform child in visuals){
+            child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
+        }
+    }
 
     public void SetMovementInput(Vector2 movementInput) {
         this.movementInput = movementInput;
     }
 
-    private void Update() {
+    private void LateUpdate() {
         MovePlayer();
     }
 

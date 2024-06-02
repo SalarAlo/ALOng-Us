@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class ColorSelectionManager : SingletonNetwork<ColorSelectionManager>
+public class ColorSelectionManager : SingletonNetworkPersistent<ColorSelectionManager>
 {
     // sort of acts like a dict where the key is just the index of the color
     public NetworkList<bool> networkedAvaibleColorList;

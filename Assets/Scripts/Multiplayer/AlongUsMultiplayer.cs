@@ -128,7 +128,7 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
             StartClient();
         }
 
-        Loader.Instance.OnSceneChanged += Loader_OnSceneChanged;
+        Loader.Instance.OnSceneChanged -= Loader_OnSceneChanged;
     }
 
     private void StartHost() {
