@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2872926875190918836}
   - component: {fileID: 2872926875190918837}
   - component: {fileID: 2872926875190918834}
+  - component: {fileID: -2085838287075352864}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Untagged
@@ -159,6 +160,20 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!64 &-2085838287075352864
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2872926875190918839}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1001 &2872926875512464219
 PrefabInstance:
   m_ObjectHideFlags: 0

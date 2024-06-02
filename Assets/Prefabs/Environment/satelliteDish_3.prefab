@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4893916460060576746}
   - component: {fileID: 7209797216503463712}
   - component: {fileID: 8345115131166548903}
+  - component: {fileID: 1328418677311195352}
   m_Layer: 0
   m_Name: satelliteDish_3
   m_TagString: Untagged
@@ -101,3 +102,17 @@ MonoBehaviour:
   rotationSpeed: 30
   rotationPauseDuration: 3
   angleThreshold: 5
+--- !u!64 &1328418677311195352
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9155435613169016565}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6304219477480679944, guid: 88497055da49053409321691a83cb6f4, type: 3}
