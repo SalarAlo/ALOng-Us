@@ -83,7 +83,7 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         ClientRpcParams clientRpcParams = new() {
                 Send = new ClientRpcSendParams() { 
                     TargetClientIds = new List<ulong>() {
-                        OwnerClientId
+                        NetworkManager.LocalClientId
                     }
                 }
         };
@@ -91,6 +91,7 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         RegisterPlayerClientRpc(
             clientRpcParams
         );
+        
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
     }

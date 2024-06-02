@@ -5,18 +5,10 @@ using UnityEngine.InputSystem;
 
 public class GameInput : Singleton<GameInput> {
     private InputActions inputActions;
-
-    private void OnEnable() {
-        inputActions.Enable();
-    }
-
-    private void OnDisable() {
-        inputActions.Disable();
-    }
-
     public override void Awake() {
         base.Awake();
         inputActions = new();
+        inputActions.Enable();
     }
 
     
@@ -24,7 +16,9 @@ public class GameInput : Singleton<GameInput> {
         inputActions.Movement.Move.performed += Movement_Performed;
     }
 
-    private void Movement_Performed(InputAction.CallbackContext callbackContext){
-        PlayerController.LocalInstance.SetMovementInput(callbackContext.ReadValue<Vector2>());
+    private void Movement_Performed(InputAction.CallbackContext callbackContext) {
+        if (PlayerController.GetLocalInstance() == null) return;
+
+        PlayerController.GetLocalInstance().SetMovementInput(callbackContext.ReadValue<Vector2>());
     }
 }

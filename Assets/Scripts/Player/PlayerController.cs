@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -17,12 +18,21 @@ public class PlayerController : NetworkBehaviour {
     private Vector2 movementInput;
     private Vector3 movementDir;
 
-    private void Awake() {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+    public static PlayerController GetLocalInstance() => LocalInstance;
+
+    public override void OnNetworkSpawn() {
+        StartCoroutine(TriggerInitialization());
     }
 
-    private void Start() {
+    private IEnumerator TriggerInitialization(){ 
+        yield return new WaitUntil(() => PlayerMoveCam.Instance != null && PlayerCam.Instance != null);
+
+        Initialize();
+    }
+
+    public void Initialize() {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
         rb.isKinematic = false;
 
         if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
@@ -33,9 +43,10 @@ public class PlayerController : NetworkBehaviour {
 
             LocalInstance = this;
             Debug.Log(name+" is the local instance");
+            Debug.Log(PlayerMoveCam.Instance);
 
-            PlayerCam.Instance.SetOrientation(orientation);
             PlayerMoveCam.Instance.SetCameraPosition(cameraPos);
+            PlayerCam.Instance.SetOrientation(orientation);
 
             DeactivateLocalVisuals();
         }

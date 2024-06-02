@@ -1,12 +1,19 @@
 using UnityEngine;
 
-public class PlayerCam : Singleton<PlayerCam>
+public class PlayerCam : SingletonNetwork<PlayerCam>
 {
     [SerializeField] private float sensX;
     [SerializeField] private float sensY;
     [SerializeField] private Transform  orientation;
     private float xRot;
     private float yRot;
+
+    public override void Awake()
+    {
+        base.Awake();
+        
+        Debug.Log("PlayerCam, AWake");
+    }
 
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
