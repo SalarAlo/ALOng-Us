@@ -11,7 +11,7 @@ public class CharacterSelectPlayerPosition : MonoBehaviour
     public void PopulateWithPlayer(PlayerData playerData) {
         this.playerData = playerData;
         var player = Instantiate(playerPrefab, transform);
-        player.SetColorTo(ColorSelectionManager.Instance.GetColorAtIndex(playerData.colorIndex));
+        player.SetColorTo(playerData.colorIndex);
         player.GetComponent<CharacterSelectionPlayer>().SetClient(playerData);
     }
     

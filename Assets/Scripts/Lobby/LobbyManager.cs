@@ -55,14 +55,9 @@ public class LobbyManager : SingletonPersistent<LobbyManager>
         }
     }
 
-    public async void CreateLobbyAsync(string name, int maxPlayers, int imposters) {
+    public async void CreateLobbyAsync(string name, int maxPlayers) {
         try {
-            CreateLobbyOptions options = new(){
-                Data = new() {
-                    { "imposters", new DataObject(DataObject.VisibilityOptions.Public, imposters.ToString()) }
-                }
-            };
-            currentLobby = await Lobbies.Instance.CreateLobbyAsync(name, maxPlayers, options);
+            currentLobby = await Lobbies.Instance.CreateLobbyAsync(name, maxPlayers);
             OnLobbyJoined?.Invoke(currentLobby);
         } catch (LobbyServiceException e) {
             OnFailOccured?.Invoke(e);

@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerVisuals : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer[] bodyParts;
     private Material material;
+    private int colorIndex;
     private void Awake() {
         material = new Material(bodyParts[0].material);
         foreach(var bodyPart in bodyParts) {
@@ -13,7 +12,8 @@ public class PlayerVisuals : MonoBehaviour
         }
     }
 
-    public void SetColorTo(Color color) {
-        material.color = color;
+    public void SetColorTo(int colorIndex) {
+        this.colorIndex = colorIndex;
+        material.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
     }
 }
