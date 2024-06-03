@@ -14,9 +14,14 @@ public class PlayerController : NetworkBehaviour {
 
     public static PlayerController LocalInstance = null;
     private Rigidbody rb;
-
     private Vector2 movementInput;
     private Vector3 movementDir;
+
+    private void Awake() {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        rb.isKinematic = false;
+    }
 
     public static PlayerController GetLocalInstance() => LocalInstance;
 
@@ -31,10 +36,6 @@ public class PlayerController : NetworkBehaviour {
     }
 
     public void Initialize() {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-        rb.isKinematic = false;
-
         if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
             if (PlayerController.LocalInstance != null) {
                 Destroy(gameObject);
@@ -50,6 +51,10 @@ public class PlayerController : NetworkBehaviour {
 
             DeactivateLocalVisuals();
         }
+    }
+
+    public bool IsMoving() {
+        return movementInput != Vector2.zero;
     }
 
     private void DeactivateLocalVisuals(){

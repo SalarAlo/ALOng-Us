@@ -17,8 +17,14 @@ public class PlayerSpawnManager : NetworkBehaviour
             PlayerData playerData = AlongUsMultiplayer.Instance.networkedPlayerDataList[i];
             Debug.Log($"SpawnManager, Spawning Player, for loop ({i}, {playerData.playerName})");
             NetworkObject playerSpawned = Instantiate(playerPrefab, spawnPositions[i].position, Quaternion.identity).GetComponent<NetworkObject>();
-            playerSpawned.GetComponent<PlayerVisuals>().SetColorTo(ColorSelectionManager.Instance.GetColorAtIndex(playerData.colorIndex));
             playerSpawned.SpawnAsPlayerObject(playerData.clientId, true);
+            SyncColorOfPlayerClientRpc(playerSpawned, playerData.colorIndex);
         }
+    }
+
+    [ClientRpc]
+    private void SyncColorOfPlayerClientRpc(NetworkObjectReference playerNetworkObjectReference, int colorIndex){
+        playerNetworkObjectReference.TryGet(out var playerNetworkObject);
+        playerNetworkObject.GetComponent<PlayerVisuals>().SetColorTo(ColorSelectionManager.Instance.GetColorAtIndex(colorIndex));
     }
 }
