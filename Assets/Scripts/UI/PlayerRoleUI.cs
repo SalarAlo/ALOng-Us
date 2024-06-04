@@ -2,15 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class PlayerRoleUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI roleTextField;
     [SerializeField] private TextMeshProUGUI roleDescriptionTextField;
+    [SerializeField] private int secondsWaiting;
     private IEnumerator Start() {
         yield return new WaitUntil(() => PlayerController.LocalInstance != null);
-
+        PlayerController.LocalInstance.SetCanMove(false);
         TriggerRoleRevealUI();
     }
 
@@ -23,6 +25,12 @@ public class PlayerRoleUI : BaseUI
         roleTextField.color = roleData.color;
         roleDescriptionTextField.text = roleData.description.ToString();
 
-        Invoke(nameof(Hide), 2);
+        Invoke(nameof(RoleRevealFinished), secondsWaiting);
+    }
+
+    private void RoleRevealFinished(){
+        Hide();
+        PlayerController.LocalInstance.SetCanMove(true);
+        Destroy(gameObject);
     }
 }

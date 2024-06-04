@@ -69391,6 +69391,7 @@ MonoBehaviour:
   ownWindow: {fileID: 1968947123}
   roleTextField: {fileID: 678423114}
   roleDescriptionTextField: {fileID: 1812330323}
+  secondsWaiting: 5
 --- !u!4 &2025532187
 Transform:
   m_ObjectHideFlags: 0

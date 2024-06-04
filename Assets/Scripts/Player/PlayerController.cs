@@ -11,6 +11,7 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform cameraPos;
     [SerializeField] private Transform visuals;
+    private bool canMove;
     public static PlayerController LocalInstance = null;
     private Rigidbody rb;
     private Vector2 movementInput;
@@ -33,6 +34,8 @@ public class PlayerController : NetworkBehaviour {
 
         Initialize();
     }
+
+    public void SetCanMove(bool canMove) => this.canMove = canMove;
 
     public void Initialize() {
         if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
@@ -67,6 +70,7 @@ public class PlayerController : NetworkBehaviour {
     }
 
     private void LateUpdate() {
+        if (!canMove) return;
         MovePlayer();
     }
 
