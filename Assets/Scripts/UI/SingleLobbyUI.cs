@@ -11,7 +11,6 @@ public class SingleLobbyUI : MonoBehaviour, IPointerDownHandler
 
     [SerializeField] private TextMeshProUGUI playersAmountTextField;
     [SerializeField] private TextMeshProUGUI lobbyNameTextField;
-    [SerializeField] private TextMeshProUGUI imposterAmountTextField;
 
     public void OnPointerDown(PointerEventData _) {
         LobbyManager.Instance.JoinLobbyByIdAsync(lobby.Id);
@@ -22,7 +21,6 @@ public class SingleLobbyUI : MonoBehaviour, IPointerDownHandler
         this.lobby = lobby;
         lobbyNameTextField.text = lobby.Name;
         playersAmountTextField.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
-        imposterAmountTextField.text = $"{lobby.Data["imposters"].Value}";
     }
 
 }

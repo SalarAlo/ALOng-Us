@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class PlayerRoleManager : MonoBehaviour {
-    private PlayerGameRole role;
+    [SerializeField] private PlayerGameRole role;
 
     public PlayerGameRole GetRole() => role; 
     public void SetRole(PlayerGameRole role) => this.role = role; 

@@ -52126,6 +52126,69 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1503464960}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1503689136
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1503689138}
+  - component: {fileID: 1503689137}
+  m_Layer: 0
+  m_Name: RoleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1503689137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503689136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b1c8161f093d6f4d9c81c68c51e159f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameRoleDatas:
+  - role: 0
+    color: {r: 0, g: 0.82210016, b: 1, a: 1}
+    description: Vote out all imposters to win the game!
+  - role: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
+    description: Kill everyone to win the game!
+  - role: 2
+    color: {r: 0, g: 1, b: 0.20058608, a: 1}
+    description: Reveal the role of one player!
+  - role: 3
+    color: {r: 1, g: 0.9371726, b: 0, a: 1}
+    description: Go invisible for a short period of time!
+  - role: 4
+    color: {r: 1, g: 0, b: 0.7185302, a: 1}
+    description: Get voted out to win the game!
+  - role: 5
+    color: {r: 1, g: 0.4408486, b: 0, a: 1}
+    description: Morph into any player for a short period of time!
+--- !u!4 &1503689138
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503689136}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -22.311985, y: 16.022648, z: 15.429626}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1507756663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61902,7 +61965,7 @@ GameObject:
   - component: {fileID: 1812330324}
   - component: {fileID: 1812330323}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: RoleDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69296,6 +69359,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024982960}
   m_Mesh: {fileID: 6288687526494353319, guid: 5f7d2d1e2a5cd1641b0ce758dce37521, type: 3}
+--- !u!1 &2025532185
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2025532187}
+  - component: {fileID: 2025532186}
+  m_Layer: 0
+  m_Name: GameRoleUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2025532186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025532185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9e18899a0882e4e8ad5843ffb31f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownWindow: {fileID: 1968947123}
+  roleTextField: {fileID: 678423114}
+  roleDescriptionTextField: {fileID: 1812330323}
+--- !u!4 &2025532187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025532185}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -22.311985, y: 16.022648, z: 15.429626}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2026845450
 GameObject:
   m_ObjectHideFlags: 0

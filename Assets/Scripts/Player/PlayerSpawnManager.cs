@@ -36,7 +36,7 @@ public class PlayerSpawnManager : NetworkBehaviour
             RoleCount roleToUse = rolesList[Random.Range(0, rolesList.Count-1)];
             roleToUse.count--;
             // No player should obtain that role anymore!
-            if(roleToUse.count == 0){
+            if(roleToUse.count == 0) {
                 int roleIndex = rolesList.FindIndex(r => r.role == roleToUse.role);
                 rolesList.RemoveAt(roleIndex);
             }

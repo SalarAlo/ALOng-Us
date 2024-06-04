@@ -11,7 +11,6 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform cameraPos;
     [SerializeField] private Transform visuals;
-
     public static PlayerController LocalInstance = null;
     private Rigidbody rb;
     private Vector2 movementInput;
