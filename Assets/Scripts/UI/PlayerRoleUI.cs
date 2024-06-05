@@ -10,12 +10,13 @@ public class PlayerRoleUI : BaseUI
     [SerializeField] private TextMeshProUGUI roleTextField;
     [SerializeField] private TextMeshProUGUI roleDescriptionTextField;
     [SerializeField] private int secondsWaiting;
-    private IEnumerator Start() {
-        yield return new WaitUntil(() => PlayerController.LocalInstance != null);
-        PlayerController.LocalInstance.SetCanMove(false);
-        TriggerRoleRevealUI();
+    private void Start() {
+        PlayerController.OnInitialised += PlayerController_OnInitialised;
     }
 
+    private void PlayerController_OnInitialised() {
+        TriggerRoleRevealUI();
+    }
     private void TriggerRoleRevealUI() {
         Show();
 

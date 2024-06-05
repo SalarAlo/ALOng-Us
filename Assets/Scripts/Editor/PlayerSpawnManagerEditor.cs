@@ -18,7 +18,7 @@ public class PlayerSpawnManagerEditor : Editor
             manager.playerRoles = new List<RoleCount>();
         }
 
-        foreach (PlayerGameRole role in System.Enum.GetValues(typeof(PlayerGameRole)))
+        foreach (PlayerRole role in System.Enum.GetValues(typeof(PlayerRole)))
         {
             if (!manager.playerRoles.Exists(r => r.role == role))
             {

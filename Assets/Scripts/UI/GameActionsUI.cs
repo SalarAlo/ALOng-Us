@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class GameActionsUI : MonoBehaviour
 {
     [SerializeField] private Image primaryActionImage;
-    [SerializeField] private TextMeshProUGUI primaryActionText;
+    [SerializeField] private ActionButtonUI primaryAction; 
+    [SerializeField] private ActionButtonUI alternateAction; 
+    [SerializeField] private ActionButtonUI mysteryItemAction; 
     [SerializeField] private Sprite taskSprite;
     [SerializeField] private Sprite killSprite;
 
@@ -16,9 +18,16 @@ public class GameActionsUI : MonoBehaviour
     }
 
     private void PlayerController_OnInitialised(){
-        PlayerGameRole role = PlayerController.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
+        PlayerRole role = PlayerController.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
         GameRoleData gameRoleData = GameRoleManager.Instance.GetDataForRole(role);
-        primaryActionImage.sprite = gameRoleData.canCompleteTasks ? taskSprite : killSprite;
-        primaryActionText.text = gameRoleData.canCompleteTasks ? "use" : "kill";
+        int i = 0;
+        foreach(ActionData actionData in gameRoleData.actions) {
+            if (i == 0){
+                primaryAction.SetAction(actionData);
+            } else if (i == 1) {
+                alternateAction.SetAction(actionData);
+            }
+            i++;
+        }
     }
 }

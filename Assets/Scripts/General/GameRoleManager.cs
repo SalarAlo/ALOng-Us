@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class GameRoleManager : Singleton<GameRoleManager>
 {
     public List<GameRoleData> gameRoleDatas;
-    public Dictionary<PlayerGameRole, GameRoleData> playerRoleDataDict;
+    public Dictionary<PlayerRole, GameRoleData> playerRoleDataDict;
 
     public override void Awake() {
         base.Awake();
@@ -18,15 +19,7 @@ public class GameRoleManager : Singleton<GameRoleManager>
         }
     }
 
-    public GameRoleData GetDataForRole(PlayerGameRole playerGameRole) {
+    public GameRoleData GetDataForRole(PlayerRole playerGameRole) {
         return playerRoleDataDict[playerGameRole];
     }
-}
-
-[Serializable]
-public class GameRoleData {
-    public PlayerGameRole role;
-    public Color color;
-    public string description;
-    public bool canCompleteTasks;
 }

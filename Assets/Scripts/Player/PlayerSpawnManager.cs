@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -20,14 +19,14 @@ public class PlayerSpawnManager : NetworkBehaviour
     
     private void OnValidate() {
         // Ensure all roles are present
-        foreach (PlayerGameRole role in System.Enum.GetValues(typeof(PlayerGameRole))) {
+        foreach (PlayerRole role in System.Enum.GetValues(typeof(PlayerRole))) {
             if (!playerRoles.Exists(r => r.role == role)) {
                 playerRoles.Add(new RoleCount { role = role, count = 0 });
             }
         }
 
         // Ensure no extra roles are present
-        playerRoles.RemoveAll(r => !System.Enum.IsDefined(typeof(PlayerGameRole), r.role));
+        playerRoles.RemoveAll(r => !System.Enum.IsDefined(typeof(PlayerRole), r.role));
     }
 
     private void SpawnPlayers() {
@@ -50,7 +49,7 @@ public class PlayerSpawnManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void SyncDataOfPlayerClientRpc(NetworkObjectReference playerNetworkObjectReference, int colorIndex, PlayerGameRole role){
+    private void SyncDataOfPlayerClientRpc(NetworkObjectReference playerNetworkObjectReference, int colorIndex, PlayerRole role){
         playerNetworkObjectReference.TryGet(out var playerNetworkObject);
         playerNetworkObject.GetComponent<PlayerVisuals>().SetColorTo(colorIndex);
         playerNetworkObject.GetComponent<PlayerRoleManager>().SetRole(role);
@@ -59,6 +58,6 @@ public class PlayerSpawnManager : NetworkBehaviour
 
 [System.Serializable]
 public class RoleCount {
-    public PlayerGameRole role;
+    public PlayerRole role;
     public int count;
 }
