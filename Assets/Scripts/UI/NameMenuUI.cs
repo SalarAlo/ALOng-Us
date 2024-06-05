@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
 using UnityEngine;
@@ -18,7 +16,6 @@ public class NameMenuUI : BaseUISingleton<NameMenuUI>
 
         Show();
     }
-
     private void Start() {
         if(AlongUsMultiplayer.Instance.GetPlayerName() != "") {
             MainMenuUI.Instance.Show();

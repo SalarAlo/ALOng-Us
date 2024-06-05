@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PlayerController : NetworkBehaviour {   
+    public static Action OnInitialised;
     [SerializeField] private float movementSpeed;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform cameraPos;
@@ -50,8 +51,9 @@ public class PlayerController : NetworkBehaviour {
 
             PlayerMoveCam.Instance.SetCameraPosition(cameraPos);
             PlayerCam.Instance.SetOrientation(orientation);
-
             DeactivateLocalVisuals();
+            
+            OnInitialised?.Invoke();
         }
     }
 

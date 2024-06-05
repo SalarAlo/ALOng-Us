@@ -28,4 +28,5 @@ public class GameRoleData {
     public PlayerGameRole role;
     public Color color;
     public string description;
+    public bool canCompleteTasks;
 }
