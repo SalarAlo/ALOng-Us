@@ -5,4 +5,5 @@ using UnityEngine;
 public class ActionData {
     public PlayerAction action;
     public Sprite sprite;
+    public int cooldown;
 }

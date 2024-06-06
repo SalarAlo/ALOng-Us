@@ -24,8 +24,13 @@ public class GameInput : Singleton<GameInput> {
         PlayerController.GetLocalInstance().SetMovementInput(callbackContext.ReadValue<Vector2>());
     }
 
-    public void SetPrimaryAction(PlayerAction action){
+    public void SetPrimaryAction(ActionData actionData){
         // inputActions.Actions.PrimaryAction.performed = null;
-        inputActions.Actions.PrimaryAction.performed += _ => GameRoleManager.Instance.GetExecutableForAction(action)?.Invoke();
+        inputActions.Actions.PrimaryAction.performed += _ => GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke();
+    }
+
+    public void SetAlternateAction(ActionData actionData){
+        // inputActions.Actions.PrimaryAction.performed = null;
+        inputActions.Actions.AlternateAction.performed += _ => GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke();
     }
 }

@@ -11923,7 +11923,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &320767067
 PrefabInstance:
@@ -22845,7 +22845,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &647974433
 PrefabInstance:
@@ -24805,7 +24805,7 @@ MonoBehaviour:
   m_ChildAlignment: 5
   m_StartCorner: 3
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
+  m_CellSize: {x: 200, y: 200}
   m_Spacing: {x: 100, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -32944,6 +32944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionText: {fileID: 43685897}
   actionImage: {fileID: 794494563}
+  coolDownText: {fileID: 0}
 --- !u!1001 &942298358
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38331,6 +38332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionText: {fileID: 1878603130}
   actionImage: {fileID: 2028316251}
+  coolDownText: {fileID: 0}
 --- !u!1 &1084536366
 GameObject:
   m_ObjectHideFlags: 0
@@ -47278,6 +47280,7 @@ GameObject:
   - component: {fileID: 1319773109}
   - component: {fileID: 1319773108}
   - component: {fileID: 1319773107}
+  - component: {fileID: 1319773110}
   m_Layer: 5
   m_Name: UseAction
   m_TagString: Untagged
@@ -47320,6 +47323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionText: {fileID: 845453627}
   actionImage: {fileID: 983384170}
+  coolDownText: {fileID: 0}
 --- !u!114 &1319773108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47340,7 +47344,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 481fc1097eb25244fb452c5da76cc03d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b601b0b032714d14598e23a25efa193f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -47358,6 +47362,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1319773105}
   m_CullTransparentMesh: 1
+--- !u!225 &1319773110
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319773105}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1331579797
 GameObject:
   m_ObjectHideFlags: 0
@@ -54579,85 +54595,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1503464960}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1503689136
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1503689138}
-  - component: {fileID: 1503689137}
-  m_Layer: 0
-  m_Name: RoleManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1503689137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503689136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b1c8161f093d6f4d9c81c68c51e159f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameRoleDatas:
-  - role: 0
-    color: {r: 0, g: 0.82210016, b: 1, a: 1}
-    description: Vote out all imposters to win the game!
-    actions: []
-  - role: 1
-    color: {r: 1, g: 0, b: 0, a: 1}
-    description: Kill everyone to win the game!
-    actions:
-    - action: 0
-      sprite: {fileID: 21300000, guid: 537b01924d1db914abc32f9595ebba9a, type: 3}
-    - action: 3
-      sprite: {fileID: 21300000, guid: 294bc25b4e971e94e950535e2954fe47, type: 3}
-  - role: 2
-    color: {r: 0, g: 1, b: 0.20058608, a: 1}
-    description: Reveal the role of one player!
-    actions:
-    - action: 4
-      sprite: {fileID: 21300000, guid: 7ea066604d6b0554abe7a8049987acd8, type: 3}
-  - role: 3
-    color: {r: 1, g: 0.9371726, b: 0, a: 1}
-    description: Go invisible for a short period of time!
-    actions:
-    - action: 2
-      sprite: {fileID: 21300000, guid: 0977724e143a1bb44a61797a101939ba, type: 3}
-  - role: 4
-    color: {r: 1, g: 0, b: 0.7185302, a: 1}
-    description: Get voted out to win the game!
-    actions: []
-  - role: 5
-    color: {r: 1, g: 0.4408486, b: 0, a: 1}
-    description: Morph into any player for a short period of time!
-    actions:
-    - action: 1
-      sprite: {fileID: 21300000, guid: cffae85515d6b444a97f8087855c200b, type: 3}
---- !u!4 &1503689138
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503689136}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.311985, y: 16.022648, z: 15.429626}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1507756663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64161,7 +64098,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1792122745
 PrefabInstance:
@@ -67899,7 +67836,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1912231516
 PrefabInstance:
@@ -72323,7 +72260,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2026845450
 GameObject:
@@ -75737,6 +75674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionText: {fileID: 1097422106}
   actionImage: {fileID: 1785142361}
+  coolDownText: {fileID: 0}
 --- !u!1001 &2114038498
 PrefabInstance:
   m_ObjectHideFlags: 0

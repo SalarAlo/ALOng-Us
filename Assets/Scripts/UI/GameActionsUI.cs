@@ -21,18 +21,6 @@ public class GameActionsUI : MonoBehaviour
         UpdateRole();
     }
     private void UpdateRole(){
-        PlayerRole role = PlayerController.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
-        GameRoleData gameRoleData = GameRoleManager.Instance.GetDataForRole(role);
-        int i = 0;
-        foreach(ActionData actionData in gameRoleData.actions) {
-            if (i == 0){
-                primaryAction.SetAction(actionData);
-                GameInput.Instance.SetPrimaryAction(actionData.action);
-            } else if (i == 1) {
-                alternateAction.SetAction(actionData);
-            }
-            i++;
-        }
     }
 
     private void Update() {
