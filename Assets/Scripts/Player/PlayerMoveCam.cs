@@ -8,8 +8,6 @@ public class PlayerMoveCam : SingletonNetwork<PlayerMoveCam>
 
     public override void Awake() {
         base.Awake();
-        
-        Debug.Log("PlayerMoveCam, AWake");
     }
 
     // Update is called once per frame

@@ -46,8 +46,6 @@ public class PlayerController : NetworkBehaviour {
             }
 
             LocalInstance = this;
-            Debug.Log(name+" is the local instance");
-            Debug.Log(PlayerMoveCam.Instance);
 
             PlayerMoveCam.Instance.SetCameraPosition(cameraPos);
             PlayerCam.Instance.SetOrientation(orientation);
@@ -60,6 +58,8 @@ public class PlayerController : NetworkBehaviour {
     public bool IsMoving() {
         return movementInput != Vector2.zero;
     }
+
+    public Transform GetVisualsParent() => visuals;
 
     private void DeactivateLocalVisuals(){
         foreach (Transform child in visuals){

@@ -43,6 +43,19 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         }
         return default;
     }
+    [ServerRpc(RequireOwnership = false)]
+    public void SetPlayerInvisibleServerRpc(NetworkObjectReference networkedPlayerObjectRef){
+        SetPlayerInvisibleClientRpc(networkedPlayerObjectRef);
+    }
+
+    [ClientRpc]
+    private void SetPlayerInvisibleClientRpc(NetworkObjectReference networkedPlayerObjectRef){
+        networkedPlayerObjectRef.TryGet(out NetworkObject networkedPlayerObject);
+        PlayerController playerController = networkedPlayerObject.GetComponent<PlayerController>();
+        foreach (Transform child in playerController.GetVisualsParent()){
+            child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
+        }
+    }
 
     [ClientRpc]
     private void RegisterPlayerClientRpc(ClientRpcParams clientRpcReceiveParams = default) {

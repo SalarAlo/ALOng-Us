@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class GameInput : Singleton<GameInput> {
     private InputActions inputActions;
+
     public override void Awake() {
         base.Awake();
         inputActions = new();
@@ -20,5 +22,10 @@ public class GameInput : Singleton<GameInput> {
         if (PlayerController.GetLocalInstance() == null) return;
 
         PlayerController.GetLocalInstance().SetMovementInput(callbackContext.ReadValue<Vector2>());
+    }
+
+    public void SetPrimaryAction(PlayerAction action){
+        // inputActions.Actions.PrimaryAction.performed = null;
+        inputActions.Actions.PrimaryAction.performed += _ => GameRoleManager.Instance.GetExecutableForAction(action)?.Invoke();
     }
 }

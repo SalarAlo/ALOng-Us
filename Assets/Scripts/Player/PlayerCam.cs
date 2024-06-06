@@ -11,8 +11,6 @@ public class PlayerCam : SingletonNetwork<PlayerCam>
     public override void Awake()
     {
         base.Awake();
-        
-        Debug.Log("PlayerCam, AWake");
     }
 
     private void Start() {

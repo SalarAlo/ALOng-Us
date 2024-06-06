@@ -94,6 +94,74 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Actions"",
+            ""id"": ""600655cd-499b-44a9-b4ab-054286845fa9"",
+            ""actions"": [
+                {
+                    ""name"": ""PrimaryAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""5d4f22c9-2444-4a4e-a3d2-31187f7494a0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlternateAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""e66eed64-e03b-47a8-bd9e-1721559f6b11"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MysteryItemAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""9aaeb39a-e4f7-4a89-abe0-4d28828fab0d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1ca54c48-364a-44da-bd33-ea6ad5d48097"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb2bb007-c4de-4c19-868c-87adbc32524e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlternateAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""358f51e0-db9d-4b32-a210-af56083db0fb"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MysteryItemAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -101,6 +169,11 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
+        // Actions
+        m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
+        m_Actions_PrimaryAction = m_Actions.FindAction("PrimaryAction", throwIfNotFound: true);
+        m_Actions_AlternateAction = m_Actions.FindAction("AlternateAction", throwIfNotFound: true);
+        m_Actions_MysteryItemAction = m_Actions.FindAction("MysteryItemAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -189,8 +262,63 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Actions
+    private readonly InputActionMap m_Actions;
+    private IActionsActions m_ActionsActionsCallbackInterface;
+    private readonly InputAction m_Actions_PrimaryAction;
+    private readonly InputAction m_Actions_AlternateAction;
+    private readonly InputAction m_Actions_MysteryItemAction;
+    public struct ActionsActions
+    {
+        private @InputActions m_Wrapper;
+        public ActionsActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PrimaryAction => m_Wrapper.m_Actions_PrimaryAction;
+        public InputAction @AlternateAction => m_Wrapper.m_Actions_AlternateAction;
+        public InputAction @MysteryItemAction => m_Wrapper.m_Actions_MysteryItemAction;
+        public InputActionMap Get() { return m_Wrapper.m_Actions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ActionsActions set) { return set.Get(); }
+        public void SetCallbacks(IActionsActions instance)
+        {
+            if (m_Wrapper.m_ActionsActionsCallbackInterface != null)
+            {
+                @PrimaryAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnPrimaryAction;
+                @PrimaryAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnPrimaryAction;
+                @PrimaryAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnPrimaryAction;
+                @AlternateAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnAlternateAction;
+                @AlternateAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnAlternateAction;
+                @AlternateAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnAlternateAction;
+                @MysteryItemAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMysteryItemAction;
+                @MysteryItemAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMysteryItemAction;
+                @MysteryItemAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMysteryItemAction;
+            }
+            m_Wrapper.m_ActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @PrimaryAction.started += instance.OnPrimaryAction;
+                @PrimaryAction.performed += instance.OnPrimaryAction;
+                @PrimaryAction.canceled += instance.OnPrimaryAction;
+                @AlternateAction.started += instance.OnAlternateAction;
+                @AlternateAction.performed += instance.OnAlternateAction;
+                @AlternateAction.canceled += instance.OnAlternateAction;
+                @MysteryItemAction.started += instance.OnMysteryItemAction;
+                @MysteryItemAction.performed += instance.OnMysteryItemAction;
+                @MysteryItemAction.canceled += instance.OnMysteryItemAction;
+            }
+        }
+    }
+    public ActionsActions @Actions => new ActionsActions(this);
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
+    }
+    public interface IActionsActions
+    {
+        void OnPrimaryAction(InputAction.CallbackContext context);
+        void OnAlternateAction(InputAction.CallbackContext context);
+        void OnMysteryItemAction(InputAction.CallbackContext context);
     }
 }
