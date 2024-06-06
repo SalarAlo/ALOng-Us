@@ -14,3 +14,6 @@ ALOng-Us is a 3D multiplayer game inspired by Among Us, developed using Unity. P
 1. Clone the repository:
    ```bash
    git clone https://github.com/SalarAlo/ALOng-Us.git
+
+## Current Status:
+ In Development
