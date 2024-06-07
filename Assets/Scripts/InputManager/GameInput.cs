@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class GameInput : Singleton<GameInput> {
+    public Action<PlayerAction> OnLocalPlayerActionTriggered;
     private InputActions inputActions;
 
     public override void Awake() {
@@ -26,11 +27,17 @@ public class GameInput : Singleton<GameInput> {
 
     public void SetPrimaryAction(ActionData actionData){
         // inputActions.Actions.PrimaryAction.performed = null;
-        inputActions.Actions.PrimaryAction.performed += _ => GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke();
+        inputActions.Actions.PrimaryAction.performed += _ => { 
+            GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke(); 
+            OnLocalPlayerActionTriggered?.Invoke(actionData.action);
+        };
     }
 
     public void SetAlternateAction(ActionData actionData){
         // inputActions.Actions.PrimaryAction.performed = null;
-        inputActions.Actions.AlternateAction.performed += _ => GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke();
+        inputActions.Actions.AlternateAction.performed += _ => {
+            GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke();
+            OnLocalPlayerActionTriggered?.Invoke(actionData.action);
+        };
     }
 }

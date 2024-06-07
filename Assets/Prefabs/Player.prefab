@@ -1922,6 +1922,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99c030e382f984e40af2e668a61ddbc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerActions: 
+  actionButtonUIPrefab: {fileID: 1965768332955477856, guid: 2ec89c28e20a72942afe91a8bc2f2f1b,
+    type: 3}
+  actionButtonParent: {fileID: 0}
 --- !u!1 &8770809630217794441
 GameObject:
   m_ObjectHideFlags: 0
