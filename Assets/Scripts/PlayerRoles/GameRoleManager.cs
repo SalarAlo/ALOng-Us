@@ -32,7 +32,7 @@ public class GameRoleManager : Singleton<GameRoleManager>
                 };
             case PlayerAction.Invisible:
                 return () => {
-                    AlongUsMultiplayer.Instance.SetPlayerInvisibleServerRpc(PlayerController.LocalInstance.NetworkObject);
+                    AlongUsMultiplayer.Instance.SetPlayerInvisibleServerRpc(Player.LocalInstance.NetworkObject);
                 };
             case PlayerAction.Reveal:
                 return () => {

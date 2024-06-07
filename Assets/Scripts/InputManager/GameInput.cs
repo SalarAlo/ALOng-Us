@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class GameInput : Singleton<GameInput> {
     public Action<PlayerAction> OnLocalPlayerActionTriggered;
     private InputActions inputActions;
+    private PlayerController localPlayerController;
 
     public override void Awake() {
         base.Awake();
@@ -16,13 +17,17 @@ public class GameInput : Singleton<GameInput> {
 
     
     private void Start() {
+        Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
+    }
+
+    private void Player_OnLocalInstanceInitialised()
+    {
+        localPlayerController = Player.LocalInstance.GetComponent<PlayerController>();
         inputActions.Movement.Move.performed += Movement_Performed;
     }
 
     private void Movement_Performed(InputAction.CallbackContext callbackContext) {
-        if (PlayerController.GetLocalInstance() == null) return;
-
-        PlayerController.GetLocalInstance().SetMovementInput(callbackContext.ReadValue<Vector2>());
+        localPlayerController.SetMovementInput(callbackContext.ReadValue<Vector2>());
     }
 
     public void SetPrimaryAction(ActionData actionData){

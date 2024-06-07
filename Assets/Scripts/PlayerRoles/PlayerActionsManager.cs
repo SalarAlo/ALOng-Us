@@ -17,7 +17,7 @@ public class PlayerActionsManager : NetworkBehaviour
 
     public override void OnNetworkSpawn() {
         if(NetworkManager.Singleton.LocalClientId == OwnerClientId)
-            PlayerController.OnInitialised += PlayerController_OnInitialised;
+            Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
     }
 
     private void GameInput_OnLocalPlayerActionTriggered(PlayerAction action) {
@@ -42,13 +42,12 @@ public class PlayerActionsManager : NetworkBehaviour
 
 
 
-    private void PlayerController_OnInitialised(){
+    private void Player_OnLocalInstanceInitialised(){
         GameInput.Instance.OnLocalPlayerActionTriggered += GameInput_OnLocalPlayerActionTriggered;
 
-        PlayerRole role = PlayerController.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
+        PlayerRole role = Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
         GameRoleData gameRoleData = GameRoleManager.Instance.GetDataForRole(role);
         
-        Debug.Log("ASODJBASO");
         foreach(ActionData actionData in gameRoleData.actions) {
             AddAction(actionData);
         }

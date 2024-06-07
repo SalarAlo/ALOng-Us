@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -7,11 +8,19 @@ using UnityEngine.Scripting;
 public class PlayerAnimatorController : NetworkBehaviour
 {
     [SerializeField] private Animator anim;
+    private PlayerController localPlayerController;
+    private void Start() {
+        Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
+    }
+
+    private void Player_OnLocalInstanceInitialised() {
+        localPlayerController = Player.LocalInstance.GetComponent<PlayerController>();
+    }
 
     private void Update() {
-        if (PlayerController.LocalInstance == null) return;
+        if (localPlayerController == null) return;
         if (NetworkManager.Singleton.LocalClientId != OwnerClientId) return;
 
-        anim.SetBool("Running", PlayerController.LocalInstance.IsMoving());
+        anim.SetBool("Running", localPlayerController.IsMoving());
     }
 }

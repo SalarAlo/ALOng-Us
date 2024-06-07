@@ -51,8 +51,8 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     [ClientRpc]
     private void SetPlayerInvisibleClientRpc(NetworkObjectReference networkedPlayerObjectRef){
         networkedPlayerObjectRef.TryGet(out NetworkObject networkedPlayerObject);
-        PlayerController playerController = networkedPlayerObject.GetComponent<PlayerController>();
-        foreach (Transform child in playerController.GetVisualsParent()){
+        PlayerVisuals playerController = networkedPlayerObject.GetComponent<PlayerVisuals>();
+        foreach (Transform child in playerController.GetVisualParent()){
             child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
         }
     }

@@ -11,16 +11,16 @@ public class PlayerRevealRoleUI : BaseUI
     [SerializeField] private TextMeshProUGUI roleDescriptionTextField;
     [SerializeField] private int secondsWaiting;
     private void Start() {
-        PlayerController.OnInitialised += PlayerController_OnInitialised;
+        Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
     }
 
-    private void PlayerController_OnInitialised() {
+    private void Player_OnLocalInstanceInitialised() {
         TriggerRoleRevealUI();
     }
     private void TriggerRoleRevealUI() {
         Show();
 
-        GameRoleData roleData = GameRoleManager.Instance.GetDataForRole(PlayerController.LocalInstance.GetComponent<PlayerRoleManager>().GetRole());
+        GameRoleData roleData = GameRoleManager.Instance.GetDataForRole(Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole());
 
         roleTextField.text = roleData.role.ToString();
         roleTextField.color = roleData.color;
@@ -31,7 +31,7 @@ public class PlayerRevealRoleUI : BaseUI
 
     private void RoleRevealFinished(){
         Hide();
-        PlayerController.LocalInstance.SetCanMove(true);
+        Player.LocalInstance.GetComponent<PlayerController>().SetCanMove(true);
         Destroy(gameObject);
     }
 }
