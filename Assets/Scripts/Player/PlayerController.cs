@@ -40,6 +40,7 @@ public class PlayerController : NetworkBehaviour {
 
     public void Initialize() {
         if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
+            Debug.Log("X");
             if (PlayerController.LocalInstance != null) {
                 Destroy(gameObject);
                 Debug.LogError("There are more then one Local Player Instances");

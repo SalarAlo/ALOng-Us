@@ -16,34 +16,27 @@ public class PlayerSpawnManager : NetworkBehaviour
 
         SpawnPlayers();
     }
-    
-    private void OnValidate() {
-        // Ensure all roles are present
-        foreach (PlayerRole role in System.Enum.GetValues(typeof(PlayerRole))) {
-            if (!playerRoles.Exists(r => r.role == role)) {
-                playerRoles.Add(new RoleCount { role = role, count = 0 });
-            }
-        }
-
-        // Ensure no extra roles are present
-        playerRoles.RemoveAll(r => !System.Enum.IsDefined(typeof(PlayerRole), r.role));
-    }
 
     private void SpawnPlayers() {
         List<RoleCount> rolesList = new(playerRoles);
         for(int i = 0; i <  AlongUsMultiplayer.Instance.networkedPlayerDataList.Count; i++) {
-            RoleCount roleToUse = rolesList[Random.Range(0, rolesList.Count-1)];
-            roleToUse.count--;
-            // No player should obtain that role anymore!
-            if(roleToUse.count == 0) {
-                int roleIndex = rolesList.FindIndex(r => r.role == roleToUse.role);
-                rolesList.RemoveAt(roleIndex);
+            if(rolesList.Count == 0) return;
+
+            int randIndex = Random.Range(0, rolesList.Count);
+            while (rolesList[randIndex].count == 0) {
+                randIndex = Random.Range(0, rolesList.Count);
             }
+            rolesList[randIndex].count--;
 
             PlayerData playerData = AlongUsMultiplayer.Instance.networkedPlayerDataList[i];
             NetworkObject playerSpawned = Instantiate(playerPrefab, spawnPositions[i].position, Quaternion.identity).GetComponent<NetworkObject>();
             playerSpawned.SpawnAsPlayerObject(playerData.clientId, true);
-            SyncDataOfPlayerClientRpc(playerSpawned, playerData.colorIndex, roleToUse.role);
+
+            if(rolesList[randIndex].count == 0) {
+                rolesList.RemoveAt(randIndex);
+            }
+            
+            SyncDataOfPlayerClientRpc(playerSpawned, playerData.colorIndex, rolesList[randIndex].role);
         }
     }
 

@@ -9,6 +9,7 @@ public class GameRoleManager : Singleton<GameRoleManager>
 {
     public List<GameRoleData> gameRoleDatas;
     public Dictionary<PlayerRole, GameRoleData> playerRoleDataDict;
+    private const int reach = 5;
 
     public override void Awake() {
         base.Awake();
@@ -27,20 +28,36 @@ public class GameRoleManager : Singleton<GameRoleManager>
         switch(playerAction){
             case PlayerAction.Kill:
                 return () => {
-                    Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
-                    
-                    if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                    if (!hit.transform.TryGetComponent(out PlayerRoleManager playerRoleManager)) return;
-                    if (playerRoleManager.GetRole() == PlayerRole.Imposter) return;
-
                     // Kill the target
                 };
             case PlayerAction.Invisible:
                 return () => {
                     AlongUsMultiplayer.Instance.SetPlayerInvisibleServerRpc(PlayerController.LocalInstance.NetworkObject);
                 };
+            case PlayerAction.Reveal:
+                return () => {
+                    if(TryGetRoleInFront(out PlayerRole role)){
+                        Debug.Log($"This is a {role}");
+                    }
+                };
             default:
                 return null;
         }
+    }
+
+    private bool TryGetRoleInFront(out PlayerRole playerRole){
+        Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        
+        if (!Physics.Raycast(ray, out RaycastHit hit, reach)) { 
+            playerRole = PlayerRole.Nothing;
+            return false; 
+        }
+        if (!hit.transform.TryGetComponent(out PlayerRoleManager playerRoleManager)) { 
+            playerRole = PlayerRole.Nothing;
+            return false; 
+        }
+
+        playerRole = playerRoleManager.GetRole();
+        return true;
     }
 }

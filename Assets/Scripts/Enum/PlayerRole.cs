@@ -1,5 +1,6 @@
 
 public enum PlayerRole {
+    Nothing,
     Crewmate,
     Imposter,
     Seer,

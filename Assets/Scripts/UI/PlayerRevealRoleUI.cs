@@ -5,7 +5,7 @@ using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-public class PlayerRoleUI : BaseUI
+public class PlayerRevealRoleUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI roleTextField;
     [SerializeField] private TextMeshProUGUI roleDescriptionTextField;
