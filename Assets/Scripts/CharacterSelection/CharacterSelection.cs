@@ -43,20 +43,4 @@ public class CharacterSelection : SingletonNetwork<CharacterSelection>
             playerPositions[i].PopulateWithPlayer(playerData);
         }
     }
-
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.T)) {
-            UpdatePlayers();
-        }
-        if (Input.GetKeyDown(KeyCode.D)) {
-            DebugEverything();
-        }
-    }
-
-    private void DebugEverything(){
-        Debug.Log($"there are currently {AlongUsMultiplayer.Instance.networkedPlayerDataList.Count} Clients connected");
-        foreach(PlayerData playerData in AlongUsMultiplayer.Instance.networkedPlayerDataList) {
-            Debug.Log($"this player with the name, {playerData.playerName} has an id of {playerData.clientId} and the colorIndex {playerData.colorIndex}");
-        }
-    }
 }

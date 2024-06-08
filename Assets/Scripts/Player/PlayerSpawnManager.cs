@@ -36,14 +36,15 @@ public class PlayerSpawnManager : NetworkBehaviour
                 rolesList.RemoveAt(randIndex);
             }
             
-            SyncDataOfPlayerClientRpc(playerSpawned, playerData.colorIndex, rolesList[randIndex].role);
+            SyncDataOfPlayerClientRpc(playerSpawned, playerData, rolesList[randIndex].role);
         }
     }
 
     [ClientRpc]
-    private void SyncDataOfPlayerClientRpc(NetworkObjectReference playerNetworkObjectReference, int colorIndex, PlayerRole role){
+    private void SyncDataOfPlayerClientRpc(NetworkObjectReference playerNetworkObjectReference, PlayerData playerData, PlayerRole role){
         playerNetworkObjectReference.TryGet(out var playerNetworkObject);
-        playerNetworkObject.GetComponent<PlayerVisuals>().SetColorTo(colorIndex);
+        playerNetworkObject.GetComponent<PlayerVisuals>().SetColorTo(playerData.colorIndex);
+        playerNetworkObject.GetComponent<PlayerVisuals>().SetPlayerName(playerData.playerName.ToString());
         playerNetworkObject.GetComponent<PlayerRoleManager>().SetRole(role);
     }
 }

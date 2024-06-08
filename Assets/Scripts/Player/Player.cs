@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,13 +8,11 @@ public class Player : NetworkBehaviour
 {
     [SerializeField] private Transform cameraPos;
     public static Action OnLocalInstanceInitialised;
+    public static Action OnAllInstancesInitialised;
     public static Player LocalInstance;
-    private PlayerData data;
-
-    public void SetPlayerData(PlayerData data) => this.data = data;
-
-    public static Player GetLocalInstance() => LocalInstance;
+    
     public override void OnNetworkSpawn() {
+        if (!(OwnerClientId == NetworkManager.Singleton.LocalClientId)) return;
         StartCoroutine(TriggerInitialization());
     }
 
@@ -24,20 +23,19 @@ public class Player : NetworkBehaviour
     }
 
     public void Initialize() {
-        if (OwnerClientId == NetworkManager.Singleton.LocalClientId) {
-            if (Player.LocalInstance != null) {
-                Destroy(gameObject);
-                Debug.LogError("There are more then one Local Player Instances");
-            }
-
-            LocalInstance = this;
-
-            PlayerMoveCam.Instance.SetCameraPosition(cameraPos);
-            PlayerCam.Instance.SetOrientation(GetComponent<PlayerController>().GetOrientation());
-            GetComponent<PlayerVisuals>().DeactivateLocalVisuals();
-            
-            OnLocalInstanceInitialised?.Invoke();
+        if (Player.LocalInstance != null) {
+            Destroy(gameObject);
+            Debug.LogError("There are more then one Local Player Instances");
         }
-    }
 
+        LocalInstance = this;
+
+        PlayerVisuals playerVisuals = GetComponent<PlayerVisuals>();
+
+        PlayerMoveCam.Instance.SetCameraPosition(cameraPos);
+        PlayerCam.Instance.SetOrientation(GetComponent<PlayerController>().GetOrientation());
+        playerVisuals.DeactivateLocalVisuals();
+
+        OnLocalInstanceInitialised?.Invoke();
+    }
 }

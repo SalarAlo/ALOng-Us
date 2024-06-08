@@ -90,6 +90,16 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         networkedPlayerDataList.RemoveAt(i);
     }
 
+    public PlayerData GetPlayerDataByClientId(ulong clientId) {
+        foreach(PlayerData playerData in networkedPlayerDataList){
+            if(playerData.clientId == clientId){
+                return playerData;
+            }
+        }
+
+        Debug.LogError("Passed in id doesnt have a player Data entry1");
+        return default;
+    }
 
     // Only invoked on the server bc. OnServerStarted is only invoked on server
     private void NetworkManager_OnServerStarted() {

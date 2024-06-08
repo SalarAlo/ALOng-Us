@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerVisuals : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer[] bodyParts;
     [SerializeField] private Transform visuals;
+    [SerializeField] private TextMeshProUGUI nameTextField;
     private Material material;
     private int colorIndex;
     private void Awake() {
@@ -23,4 +25,9 @@ public class PlayerVisuals : MonoBehaviour
         this.colorIndex = colorIndex;
         material.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
     }
+
+    public void SetPlayerName(string name) {
+        nameTextField.text = name;
+    }
+
 }
