@@ -93,7 +93,7 @@ public class EmoteWheelUI : BaseUISingleton<EmoteWheelUI>
     private void Update() {
         if(isOpen){
             for(int i = 1; i <= OPTIONS_COUNT; i++){
-                if(Input.GetKeyDown(i.ToString())){
+                if(Input.GetKeyDown((i+1).ToString())){
                     Player.LocalInstance.GetComponent<PlayerVisuals>().Emote(i);
                 }
             }

@@ -1779,7 +1779,7 @@ GameObject:
   - component: {fileID: 6007185357398038376}
   - component: {fileID: 4268370116453729828}
   m_Layer: 0
-  m_Name: Image
+  m_Name: EmoteImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2159,6 +2159,7 @@ MonoBehaviour:
   - {fileID: 6758580990122325970}
   visuals: {fileID: 8520947923968979805}
   nameTextField: {fileID: 4388448620837851534}
+  emoteImage: {fileID: 4268370116453729828}
 --- !u!114 &-8466429829574159331
 MonoBehaviour:
   m_ObjectHideFlags: 0
