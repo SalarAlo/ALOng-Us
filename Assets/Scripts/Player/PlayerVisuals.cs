@@ -1,13 +1,15 @@
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerVisuals : MonoBehaviour
+public class PlayerVisuals : NetworkBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer[] bodyParts;
     [SerializeField] private Transform visuals;
     [SerializeField] private TextMeshProUGUI nameTextField;
+    [SerializeField] private Image emoteImage; 
     private Material material;
-    private int colorIndex;
     private void Awake() {
         material = new Material(bodyParts[0].material);
         foreach(var bodyPart in bodyParts) {
@@ -21,8 +23,8 @@ public class PlayerVisuals : MonoBehaviour
             child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
         }
     }
+
     public void SetColorTo(int colorIndex) {
-        this.colorIndex = colorIndex;
         material.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
     }
 
@@ -30,4 +32,17 @@ public class PlayerVisuals : MonoBehaviour
         nameTextField.text = name;
     }
 
+    public void Emote(int emoteIndex){
+        EmoteServerRpc(emoteIndex);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void EmoteServerRpc(int emoteIndex) {
+        EmoteClientRpc(emoteIndex);
+    }
+
+    [ClientRpc]
+    private void EmoteClientRpc(int emoteIndex){
+        emoteImage.sprite = EmoteWheelUI.Instance.GetEmoteSpriteByIndex(emoteIndex);
+    }
 }

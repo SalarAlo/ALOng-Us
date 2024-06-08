@@ -162,6 +162,34 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""4e10b6a1-fe43-4d4d-a1ee-e66987373e57"",
+            ""actions"": [
+                {
+                    ""name"": ""Emote"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7844d99-9a6f-4ae1-83ea-77818bbf1d74"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a5d54371-677d-42db-90ac-f797edbef100"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Emote"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -174,6 +202,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Actions_PrimaryAction = m_Actions.FindAction("PrimaryAction", throwIfNotFound: true);
         m_Actions_AlternateAction = m_Actions.FindAction("AlternateAction", throwIfNotFound: true);
         m_Actions_MysteryItemAction = m_Actions.FindAction("MysteryItemAction", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_Emote = m_UI.FindAction("Emote", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -311,6 +342,39 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         }
     }
     public ActionsActions @Actions => new ActionsActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private IUIActions m_UIActionsCallbackInterface;
+    private readonly InputAction m_UI_Emote;
+    public struct UIActions
+    {
+        private @InputActions m_Wrapper;
+        public UIActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Emote => m_Wrapper.m_UI_Emote;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void SetCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            {
+                @Emote.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEmote;
+                @Emote.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEmote;
+                @Emote.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEmote;
+            }
+            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Emote.started += instance.OnEmote;
+                @Emote.performed += instance.OnEmote;
+                @Emote.canceled += instance.OnEmote;
+            }
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -320,5 +384,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnPrimaryAction(InputAction.CallbackContext context);
         void OnAlternateAction(InputAction.CallbackContext context);
         void OnMysteryItemAction(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnEmote(InputAction.CallbackContext context);
     }
 }

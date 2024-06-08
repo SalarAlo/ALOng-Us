@@ -43,7 +43,8 @@ public abstract class BaseUISingletonPersistent<T> : SingletonPersistent<T> wher
 
 public abstract class BaseUISingleton<T> : Singleton<T> where T : Component
 {
-    [SerializeField] private GameObject ownWindow;
+    [SerializeField] protected GameObject ownWindow;
+    protected bool isOpen;
 
     public override void Awake() {
         base.Awake();
@@ -52,10 +53,12 @@ public abstract class BaseUISingleton<T> : Singleton<T> where T : Component
 
     public virtual void Show() {
         ownWindow.SetActive(true);
+        isOpen = true;
         BaseUI.OnAnyWindowOpened?.Invoke();
     }
 
     public virtual void Hide() {
+        isOpen = false;
         ownWindow.SetActive(false);
     }
 }

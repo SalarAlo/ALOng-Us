@@ -5,12 +5,19 @@ public class PlayerCam : SingletonNetwork<PlayerCam>
     [SerializeField] private float sensX;
     [SerializeField] private float sensY;
     [SerializeField] private Transform  orientation;
+    [SerializeField] private bool canLookAround;
     private float xRot;
     private float yRot;
 
     public override void Awake()
     {
         base.Awake();
+    }
+
+    public void SetCanLookAround(bool state){
+        canLookAround = state;
+        Cursor.lockState = canLookAround ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = ! canLookAround;
     }
 
     private void Start() {
@@ -20,6 +27,7 @@ public class PlayerCam : SingletonNetwork<PlayerCam>
 
     private void LateUpdate() {
         if (!orientation) return;
+        if (!canLookAround) return;
 
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
