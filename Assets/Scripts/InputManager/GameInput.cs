@@ -16,15 +16,11 @@ public class GameInput : Singleton<GameInput> {
     }
 
     private void Start() {
-        inputActions.UI.Emote.performed += Emote_Performed;
         Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
     }
 
-    private void Emote_Performed(InputAction.CallbackContext context) {
-        if(EmoteWheelUI.Instance.GetIsOpen())
-            EmoteWheelUI.Instance.Show();
-        else 
-            EmoteWheelUI.Instance.Hide();
+    public void SubscribeToEmote(Action action){
+        inputActions.UI.Emote.performed += _ => action?.Invoke();
     }
 
     private void Player_OnLocalInstanceInitialised()

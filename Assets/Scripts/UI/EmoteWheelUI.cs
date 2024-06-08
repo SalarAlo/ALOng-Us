@@ -31,6 +31,17 @@ public class EmoteWheelUI : BaseUISingleton<EmoteWheelUI>
         Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
     }
 
+    private void Start() {
+        GameInput.Instance.SubscribeToEmote(GameInput_SubscribeToEmote);
+    }
+
+    private void GameInput_SubscribeToEmote() {
+        if(isOpen) Hide();
+        else Show();
+
+        Debug.Log("Triggered");
+    }
+
     private void Player_OnLocalInstanceInitialised(){
         Initialize();
     }
