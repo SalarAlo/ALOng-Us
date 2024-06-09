@@ -9,6 +9,7 @@ public class PlayerRevealRoleUI : BaseUI
 {
     [SerializeField] private TextMeshProUGUI roleTextField;
     [SerializeField] private TextMeshProUGUI roleDescriptionTextField;
+    [SerializeField] private RoleRevealBackground roleRevealBackground;
     [SerializeField] private int secondsWaiting;
     private void Start() {
         Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
@@ -25,6 +26,9 @@ public class PlayerRevealRoleUI : BaseUI
         roleTextField.text = roleData.role.ToString();
         roleTextField.color = roleData.color;
         roleDescriptionTextField.text = roleData.description.ToString();
+        
+        roleRevealBackground.SetColor(roleData.color);
+        roleRevealBackground.StartAnim(secondsWaiting-1);
 
         Invoke(nameof(RoleRevealFinished), secondsWaiting);
     }
