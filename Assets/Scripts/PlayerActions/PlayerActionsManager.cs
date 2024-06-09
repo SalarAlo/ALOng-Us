@@ -11,13 +11,8 @@ using UnityEngine;
 
 public class PlayerActionsManager : NetworkBehaviour
 {
+    public Action<List<PlayerAction>> OnPlayerActionsListChanged;
     [SerializeField] private List<PlayerAction> playerActions;
-    [SerializeField] private List<ActionButtonUI> actionsButtons;
-    private Dictionary<PlayerAction, ActionButtonUI> actionButtonDict;
-
-    private void Awake() {
-        actionButtonDict = new();
-    }
 
     public override void OnNetworkSpawn() {
         if(NetworkManager.Singleton.LocalClientId == OwnerClientId)
@@ -25,11 +20,18 @@ public class PlayerActionsManager : NetworkBehaviour
     }
 
     private void GameInput_OnLocalPlayerActionTriggered(PlayerAction action) {
-        // implement cooldown logic
+        ActionDataSO actionDataSO = GeneralActionsManager.Instance.GetDataForAction(action);
+
+        if(actionDataSO.cooldown == 0) return;
+
+        else if (actionDataSO.cooldown == -1) {
+            RemoveAction(action);
+            return;
+        }
     }
 
     public void AddAction(PlayerAction actionToAdd) {
-        ActionDataSO actionToAddData = GameRoleManager.Instance.GetDataForAction(actionToAdd);
+        ActionDataSO actionToAddData = GeneralActionsManager.Instance.GetDataForAction(actionToAdd);
         playerActions.Add(actionToAdd);
 
         switch(playerActions.Count) {
@@ -50,9 +52,7 @@ public class PlayerActionsManager : NetworkBehaviour
                 break;
         }
 
-        ActionButtonUI actionButtonToSet = actionsButtons[playerActions.Count-1];
-        actionButtonDict[actionToAdd] = actionButtonToSet;
-        actionButtonToSet.SetAction(actionToAdd);
+        OnPlayerActionsListChanged?.Invoke(playerActions);
     }
 
     public void ReplaceAction(PlayerAction actionToRemove, PlayerAction actionToAdd) {
@@ -61,20 +61,34 @@ public class PlayerActionsManager : NetworkBehaviour
     }
 
     public void RemoveAction(PlayerAction actionToRemove){
-        if(!actionButtonDict.ContainsKey(actionToRemove)) {
-            Debug.LogError("Trying to remove an action which doesnt exist");
-            return;
-        }
-
         int indexOfActionToRemove = playerActions.IndexOf(actionToRemove);
+        switch(indexOfActionToRemove+1){
+            case 1:
+                GameInput.Instance.DisableMainAction();
+                break;
+            case 2:
+                GameInput.Instance.DisablePrimaryAction();
+                break;
+            case 3:
+                GameInput.Instance.DisableAlternateAction();
+                break;
+            case 4:
+                GameInput.Instance.DisableOptionalAction();
+                break;
+            default:
+                Debug.Log("WHY TF DO YOU HAVE MORE THEN 4 ACTIONS!");
+                break;
+        }
         playerActions.RemoveAt(indexOfActionToRemove);
-        actionButtonDict[actionToRemove].Hide();
+
+
+
+        OnPlayerActionsListChanged?.Invoke(playerActions);
     }
 
     private void Player_OnLocalInstanceInitialised(){
         GameInput.Instance.OnLocalPlayerActionTriggered += GameInput_OnLocalPlayerActionTriggered;
 
-        actionsButtons = ActionButtonsParent.Instance.GetChildren().ToList();
         PlayerRole role = Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
         var actions = GameRoleManager.Instance.GetDataForRole(role).actions.Select(actionData => actionData.action);
         
@@ -82,9 +96,7 @@ public class PlayerActionsManager : NetworkBehaviour
             AddAction(actionData);
         }
 
-        foreach(ActionButtonUI actionButton in actionsButtons){
-            if(!actionButton.IsActionSet()) actionButton.Hide();
-        }
+        ActionsButtonManagerUI.Instance.UpdateButtons(playerActions);
     }
 
 }

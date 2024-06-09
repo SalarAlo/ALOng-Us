@@ -118,9 +118,18 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""MysteryItemAction"",
+                    ""name"": ""MainAction"",
                     ""type"": ""Button"",
                     ""id"": ""9aaeb39a-e4f7-4a89-abe0-4d28828fab0d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OptionalAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""79831eea-d31e-4dfa-821b-ae297e7ee3c8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -131,7 +140,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1ca54c48-364a-44da-bd33-ea6ad5d48097"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -142,7 +151,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fb2bb007-c4de-4c19-868c-87adbc32524e"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -153,11 +162,22 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""358f51e0-db9d-4b32-a210-af56083db0fb"",
-                    ""path"": ""<Keyboard>/x"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MysteryItemAction"",
+                    ""action"": ""MainAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f02b02c-0bc4-4604-bae0-e8d1130139e0"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OptionalAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -201,7 +221,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
         m_Actions_PrimaryAction = m_Actions.FindAction("PrimaryAction", throwIfNotFound: true);
         m_Actions_AlternateAction = m_Actions.FindAction("AlternateAction", throwIfNotFound: true);
-        m_Actions_MysteryItemAction = m_Actions.FindAction("MysteryItemAction", throwIfNotFound: true);
+        m_Actions_MainAction = m_Actions.FindAction("MainAction", throwIfNotFound: true);
+        m_Actions_OptionalAction = m_Actions.FindAction("OptionalAction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Emote = m_UI.FindAction("Emote", throwIfNotFound: true);
@@ -299,14 +320,16 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private IActionsActions m_ActionsActionsCallbackInterface;
     private readonly InputAction m_Actions_PrimaryAction;
     private readonly InputAction m_Actions_AlternateAction;
-    private readonly InputAction m_Actions_MysteryItemAction;
+    private readonly InputAction m_Actions_MainAction;
+    private readonly InputAction m_Actions_OptionalAction;
     public struct ActionsActions
     {
         private @InputActions m_Wrapper;
         public ActionsActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @PrimaryAction => m_Wrapper.m_Actions_PrimaryAction;
         public InputAction @AlternateAction => m_Wrapper.m_Actions_AlternateAction;
-        public InputAction @MysteryItemAction => m_Wrapper.m_Actions_MysteryItemAction;
+        public InputAction @MainAction => m_Wrapper.m_Actions_MainAction;
+        public InputAction @OptionalAction => m_Wrapper.m_Actions_OptionalAction;
         public InputActionMap Get() { return m_Wrapper.m_Actions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -322,9 +345,12 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @AlternateAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnAlternateAction;
                 @AlternateAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnAlternateAction;
                 @AlternateAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnAlternateAction;
-                @MysteryItemAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMysteryItemAction;
-                @MysteryItemAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMysteryItemAction;
-                @MysteryItemAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMysteryItemAction;
+                @MainAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMainAction;
+                @MainAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMainAction;
+                @MainAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnMainAction;
+                @OptionalAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnOptionalAction;
+                @OptionalAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnOptionalAction;
+                @OptionalAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnOptionalAction;
             }
             m_Wrapper.m_ActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -335,9 +361,12 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @AlternateAction.started += instance.OnAlternateAction;
                 @AlternateAction.performed += instance.OnAlternateAction;
                 @AlternateAction.canceled += instance.OnAlternateAction;
-                @MysteryItemAction.started += instance.OnMysteryItemAction;
-                @MysteryItemAction.performed += instance.OnMysteryItemAction;
-                @MysteryItemAction.canceled += instance.OnMysteryItemAction;
+                @MainAction.started += instance.OnMainAction;
+                @MainAction.performed += instance.OnMainAction;
+                @MainAction.canceled += instance.OnMainAction;
+                @OptionalAction.started += instance.OnOptionalAction;
+                @OptionalAction.performed += instance.OnOptionalAction;
+                @OptionalAction.canceled += instance.OnOptionalAction;
             }
         }
     }
@@ -383,7 +412,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     {
         void OnPrimaryAction(InputAction.CallbackContext context);
         void OnAlternateAction(InputAction.CallbackContext context);
-        void OnMysteryItemAction(InputAction.CallbackContext context);
+        void OnMainAction(InputAction.CallbackContext context);
+        void OnOptionalAction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

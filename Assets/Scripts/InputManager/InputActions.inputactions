@@ -96,9 +96,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MysteryItemAction",
+                    "name": "MainAction",
                     "type": "Button",
                     "id": "9aaeb39a-e4f7-4a89-abe0-4d28828fab0d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OptionalAction",
+                    "type": "Button",
+                    "id": "79831eea-d31e-4dfa-821b-ae297e7ee3c8",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -109,7 +118,7 @@
                 {
                     "name": "",
                     "id": "1ca54c48-364a-44da-bd33-ea6ad5d48097",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -120,7 +129,7 @@
                 {
                     "name": "",
                     "id": "fb2bb007-c4de-4c19-868c-87adbc32524e",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -131,11 +140,22 @@
                 {
                     "name": "",
                     "id": "358f51e0-db9d-4b32-a210-af56083db0fb",
-                    "path": "<Keyboard>/x",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MysteryItemAction",
+                    "action": "MainAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f02b02c-0bc4-4604-bae0-e8d1130139e0",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OptionalAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -24,7 +24,7 @@ public class ActionButtonUI : MonoBehaviour {
     }
 
     public void SetAction(PlayerAction action) {
-        var actionData = GameRoleManager.Instance.GetDataForAction(action);
+        var actionData = GeneralActionsManager.Instance.GetDataForAction(action);
         actionSet = true;
 
         gameObject.SetActive(true);

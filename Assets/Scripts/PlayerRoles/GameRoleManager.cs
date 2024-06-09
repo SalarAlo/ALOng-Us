@@ -25,15 +25,6 @@ public class GameRoleManager : Singleton<GameRoleManager>
         return playerRoleDataDict[playerGameRole];
     }
 
-    public ActionDataSO GetDataForAction(PlayerAction action) {
-        foreach(PlayerRoleDataSO gameRoleData in playerRoleDataDict.Values){
-            if(gameRoleData.actions.Select(i => i.action).Contains(action)){
-                return gameRoleData.actions.First(act => act.action == action);
-            }
-        }
-        return null;
-    }
-
     public Action GetExecutableForAction(PlayerAction playerAction){
         switch(playerAction){
             case PlayerAction.Kill:

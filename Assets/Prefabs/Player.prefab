@@ -2056,9 +2056,10 @@ GameObject:
   - component: {fileID: 4448649045960851228}
   - component: {fileID: 404550757}
   - component: {fileID: 6525397854980552708}
+  - component: {fileID: 7942615641133127093}
   - component: {fileID: -8466429829574159331}
   - component: {fileID: -5277641910364595164}
-  - component: {fileID: 7942615641133127093}
+  - component: {fileID: -2032064822798866749}
   - component: {fileID: 404550758}
   - component: {fileID: 1062418269}
   - component: {fileID: 1062418275}
@@ -2160,6 +2161,19 @@ MonoBehaviour:
   visuals: {fileID: 8520947923968979805}
   nameTextField: {fileID: 4388448620837851534}
   emoteImage: {fileID: 4268370116453729828}
+--- !u!114 &7942615641133127093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8676685365730186976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc01d7ed3954d7a41a8fe1399be8f3a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 8702020588737159178}
 --- !u!114 &-8466429829574159331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2186,9 +2200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerActions: 
-  actionButtonUIPrefab: {fileID: 1965768332955477856, guid: 2ec89c28e20a72942afe91a8bc2f2f1b,
-    type: 3}
---- !u!114 &7942615641133127093
+--- !u!114 &-2032064822798866749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2197,10 +2209,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8676685365730186976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc01d7ed3954d7a41a8fe1399be8f3a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 4573166813b73e944bc0c32e4e49fa22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 8702020588737159178}
 --- !u!114 &404550758
 MonoBehaviour:
   m_ObjectHideFlags: 0

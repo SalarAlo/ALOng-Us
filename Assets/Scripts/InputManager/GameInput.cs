@@ -40,13 +40,16 @@ public class GameInput : Singleton<GameInput> {
 
     public void SetMainAction(ActionDataSO actionData){
         if(currentMainAction != null) {
-            inputActions.Actions.PrimaryAction.performed -= currentMainAction;
+            inputActions.Actions.MainAction.performed -= currentMainAction;
         }
 
         currentMainAction = GetActionForData(actionData); 
 
-        inputActions.Actions.PrimaryAction.performed += currentMainAction;
+        inputActions.Actions.MainAction.performed += currentMainAction;
     }
+
+    public void DisableMainAction() => inputActions.Actions.MainAction.performed -= currentMainAction;
+    public void EnableMainAction() => inputActions.Actions.MainAction.performed += currentMainAction;
 
     public void SetPrimaryAction(ActionDataSO actionData){
         if(currentPrimaryAction != null) {
@@ -57,6 +60,8 @@ public class GameInput : Singleton<GameInput> {
 
         inputActions.Actions.PrimaryAction.performed += currentPrimaryAction;
     }
+    public void DisablePrimaryAction() => inputActions.Actions.PrimaryAction.performed -= currentPrimaryAction;
+    public void EnablePrimaryAction() => inputActions.Actions.PrimaryAction.performed += currentPrimaryAction;
 
     public void SetAlternateAction(ActionDataSO actionData){
         if (currentAlternateAction != null) {
@@ -67,15 +72,22 @@ public class GameInput : Singleton<GameInput> {
 
         inputActions.Actions.AlternateAction.performed += currentAlternateAction;
     }
+    public void DisableAlternateAction() => inputActions.Actions.AlternateAction.performed -= currentAlternateAction;
+    public void EnableAlternateAction() => inputActions.Actions.AlternateAction.performed += currentAlternateAction;
 
-    public void SetOptionalAction(ActionDataSO actionData){
+
+    public void SetOptionalAction(ActionDataSO actionData) {
+
         if (currentOptionalAction != null) {
-            inputActions.Actions.AlternateAction.performed -= currentOptionalAction;
+            inputActions.Actions.OptionalAction.performed -= currentOptionalAction;
         }
         currentOptionalAction = GetActionForData(actionData);
 
-        inputActions.Actions.AlternateAction.performed += currentOptionalAction;
+        inputActions.Actions.OptionalAction.performed += currentOptionalAction;
     }
+
+    public void DisableOptionalAction() => inputActions.Actions.OptionalAction.performed -= currentOptionalAction;
+    public void EnableOptionalAction() => inputActions.Actions.OptionalAction.performed += currentOptionalAction;
 
     private Action<InputAction.CallbackContext> GetActionForData(ActionDataSO data){
         return  _ => {
