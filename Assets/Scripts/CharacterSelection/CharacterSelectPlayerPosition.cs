@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CharacterSelectPlayerPosition : MonoBehaviour
 {
-    [SerializeField] private PlayerVisuals playerPrefab;
+    [SerializeField] private PlayerVisualsColor playerPrefab;
     private PlayerData playerData;
 
     public void PopulateWithPlayer(PlayerData playerData) {

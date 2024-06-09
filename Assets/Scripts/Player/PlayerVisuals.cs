@@ -3,31 +3,21 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerVisuals : NetworkBehaviour
+public class PlayerVisuals : PlayerVisualsColor
 {
-    [SerializeField] private SkinnedMeshRenderer[] bodyParts;
     [SerializeField] private Transform visuals;
     [SerializeField] private TextMeshProUGUI nameTextField;
     [SerializeField] private Image emoteImage; 
-    private Material material;
-    private void Awake() {
-        material = new Material(bodyParts[0].material);
-        foreach(var bodyPart in bodyParts) {
-            bodyPart.material = material;
-        }
+    protected override void Awake() {
+        base.Awake();
+        HideEmote();
     }
     public Transform GetVisualParent() => visuals;
-
     public void DeactivateLocalVisuals(){
         foreach (Transform child in visuals){
             child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
         }
     }
-
-    public void SetColorTo(int colorIndex) {
-        material.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
-    }
-
     public void SetPlayerName(string name) {
         nameTextField.text = name;
     }
@@ -43,6 +33,13 @@ public class PlayerVisuals : NetworkBehaviour
 
     [ClientRpc]
     private void EmoteClientRpc(int emoteIndex){
+        int secondsToWait = 6;
+        emoteImage.gameObject.SetActive(true);
         emoteImage.sprite = EmoteWheelUI.Instance.GetEmoteSpriteByIndex(emoteIndex);
+        Invoke(nameof(HideEmote), secondsToWait);
+    }
+
+    private void HideEmote(){
+        emoteImage.gameObject.SetActive(false);
     }
 }

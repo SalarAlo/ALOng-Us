@@ -95,6 +95,7 @@ public class EmoteWheelUI : BaseUISingleton<EmoteWheelUI>
             for(int i = 1; i <= OPTIONS_COUNT; i++){
                 if(Input.GetKeyDown((i+1).ToString())){
                     Player.LocalInstance.GetComponent<PlayerVisuals>().Emote(i);
+                    Hide();
                 }
             }
         }

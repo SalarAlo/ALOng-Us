@@ -2022,7 +2022,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8296219795588500570}
-  - component: {fileID: 6525397854980552708}
+  - component: {fileID: 6644897069153726918}
   - component: {fileID: 2377542665841903613}
   - component: {fileID: -4463148448847357773}
   m_Layer: 0
@@ -2052,7 +2052,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6525397854980552708
+--- !u!114 &6644897069153726918
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2061,12 +2061,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8676685365730186976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e388034dae5bad14b92f3b4470de58da, type: 3}
+  m_Script: {fileID: 11500000, guid: f9ad28906eea69d44978ee0834ed4dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyParts:
-  - {fileID: 2516424288351934619}
   - {fileID: 6758580990122325970}
+  - {fileID: 2516424288351934619}
 --- !u!114 &2377542665841903613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2080,7 +2080,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 5945259183692529319}
-  owner: 0
   kickButton: {fileID: 5471141956156617304}
 --- !u!114 &-4463148448847357773
 MonoBehaviour:
