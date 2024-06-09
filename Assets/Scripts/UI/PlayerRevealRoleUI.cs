@@ -20,10 +20,9 @@ public class PlayerRevealRoleUI : BaseUI
     }
     private void TriggerRoleRevealUI() {
         Show();
+        var roleData = GameRoleManager.Instance.GetDataForRole(Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole());
 
-        GameRoleData roleData = GameRoleManager.Instance.GetDataForRole(Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole());
-
-        roleTextField.text = roleData.role.ToString();
+        roleTextField.text = roleData.playerRole.ToString();
         roleTextField.color = roleData.color;
         roleDescriptionTextField.text = roleData.description.ToString();
         

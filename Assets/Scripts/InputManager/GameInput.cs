@@ -9,6 +9,11 @@ public class GameInput : Singleton<GameInput> {
     private InputActions inputActions;
     private PlayerController localPlayerController;
 
+    private Action<InputAction.CallbackContext> currentMainAction;
+    private Action<InputAction.CallbackContext> currentPrimaryAction;
+    private Action<InputAction.CallbackContext> currentAlternateAction;
+    private Action<InputAction.CallbackContext> currentOptionalAction;
+
     public override void Awake() {
         base.Awake();
         inputActions = new();
@@ -33,19 +38,49 @@ public class GameInput : Singleton<GameInput> {
         localPlayerController.SetMovementInput(callbackContext.ReadValue<Vector2>());
     }
 
-    public void SetPrimaryAction(ActionData actionData){
-        // inputActions.Actions.PrimaryAction.performed = null;
-        inputActions.Actions.PrimaryAction.performed += _ => { 
-            GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke(); 
-            OnLocalPlayerActionTriggered?.Invoke(actionData.action);
-        };
+    public void SetMainAction(ActionDataSO actionData){
+        if(currentMainAction != null) {
+            inputActions.Actions.PrimaryAction.performed -= currentMainAction;
+        }
+
+        currentMainAction = GetActionForData(actionData); 
+
+        inputActions.Actions.PrimaryAction.performed += currentMainAction;
     }
 
-    public void SetAlternateAction(ActionData actionData){
-        // inputActions.Actions.PrimaryAction.performed = null;
-        inputActions.Actions.AlternateAction.performed += _ => {
-            GameRoleManager.Instance.GetExecutableForAction(actionData.action)?.Invoke();
-            OnLocalPlayerActionTriggered?.Invoke(actionData.action);
+    public void SetPrimaryAction(ActionDataSO actionData){
+        if(currentPrimaryAction != null) {
+            inputActions.Actions.PrimaryAction.performed -= currentPrimaryAction;
+        }
+
+        currentPrimaryAction = GetActionForData(actionData); 
+
+        inputActions.Actions.PrimaryAction.performed += currentPrimaryAction;
+    }
+
+    public void SetAlternateAction(ActionDataSO actionData){
+        if (currentAlternateAction != null) {
+            inputActions.Actions.AlternateAction.performed -= currentAlternateAction;
+        }
+
+        currentAlternateAction = GetActionForData(actionData);
+
+        inputActions.Actions.AlternateAction.performed += currentAlternateAction;
+    }
+
+    public void SetOptionalAction(ActionDataSO actionData){
+        if (currentOptionalAction != null) {
+            inputActions.Actions.AlternateAction.performed -= currentOptionalAction;
+        }
+        currentOptionalAction = GetActionForData(actionData);
+
+        inputActions.Actions.AlternateAction.performed += currentOptionalAction;
+    }
+
+    private Action<InputAction.CallbackContext> GetActionForData(ActionDataSO data){
+        return  _ => {
+            GameRoleManager.Instance.GetExecutableForAction(data.action)?.Invoke();
+            OnLocalPlayerActionTriggered?.Invoke(data.action);
         };
     }
 }

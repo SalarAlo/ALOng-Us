@@ -3,7 +3,7 @@ public enum PlayerRole {
     Nothing,
     Crewmate,
     Imposter,
-    Seer,
+    Tracker,
     Specter,
     Jester,
     Morpher,

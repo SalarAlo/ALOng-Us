@@ -3,25 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameRoleManager : Singleton<GameRoleManager>
 {
-    public List<GameRoleData> gameRoleDatas;
-    public Dictionary<PlayerRole, GameRoleData> playerRoleDataDict;
+    public List<PlayerRoleDataSO> gameRoleDatas;
+    public Dictionary<PlayerRole, PlayerRoleDataSO> playerRoleDataDict;
     private const int reach = 5;
 
     public override void Awake() {
         base.Awake();
         playerRoleDataDict = new();
 
-        foreach (GameRoleData data in gameRoleDatas) {
-            playerRoleDataDict[data.role] = data;
+        foreach (PlayerRoleDataSO data in gameRoleDatas) {
+            playerRoleDataDict[data.playerRole] = data;
         }
     }
 
-    public GameRoleData GetDataForRole(PlayerRole playerGameRole) {
+    public PlayerRoleDataSO GetDataForRole(PlayerRole playerGameRole) {
         return playerRoleDataDict[playerGameRole];
+    }
+
+    public ActionDataSO GetDataForAction(PlayerAction action) {
+        foreach(PlayerRoleDataSO gameRoleData in playerRoleDataDict.Values){
+            if(gameRoleData.actions.Select(i => i.action).Contains(action)){
+                return gameRoleData.actions.First(act => act.action == action);
+            }
+        }
+        return null;
     }
 
     public Action GetExecutableForAction(PlayerAction playerAction){
@@ -33,12 +43,6 @@ public class GameRoleManager : Singleton<GameRoleManager>
             case PlayerAction.Invisible:
                 return () => {
                     AlongUsMultiplayer.Instance.SetPlayerInvisibleServerRpc(Player.LocalInstance.NetworkObject);
-                };
-            case PlayerAction.Reveal:
-                return () => {
-                    if(TryGetRoleInFront(out PlayerRole role)){
-                        Debug.Log($"This is a {role}");
-                    }
                 };
             default:
                 return null;

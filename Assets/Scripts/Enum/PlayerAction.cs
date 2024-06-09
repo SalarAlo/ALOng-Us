@@ -1,8 +1,10 @@
 
 public enum PlayerAction {
+    Use,
     Kill,
     Morph,
     Invisible,
     Sabotage,
-    Reveal,
+    Track,
+    TakeTrack,
 }
