@@ -22,7 +22,7 @@ public class PlayerSpawnManager : NetworkBehaviour
         for(int i = 0; i <  AlongUsMultiplayer.Instance.networkedPlayerDataList.Count; i++) {
             if(rolesList.Count == 0) return;
 
-            int randIndex = Random.Range(0, rolesList.Count);
+            int randIndex = Random.Range(0, rolesList.Count-1);
             while (rolesList[randIndex].count == 0) {
                 randIndex = Random.Range(0, rolesList.Count);
             }

@@ -28,6 +28,10 @@ public class PlayerActionsManager : NetworkBehaviour
             RemoveAction(action);
             return;
         }
+
+        PlayerCooldownManager playerCooldownManager = Player.LocalInstance.GetComponent<PlayerCooldownManager>();
+        playerCooldownManager.AddActionToCooldown(action, actionDataSO.cooldown, playerActions.IndexOf(action));
+        DisableActionOnIndex(playerActions.IndexOf(action));
     }
 
     public void AddAction(PlayerAction actionToAdd) {
@@ -62,7 +66,14 @@ public class PlayerActionsManager : NetworkBehaviour
 
     public void RemoveAction(PlayerAction actionToRemove){
         int indexOfActionToRemove = playerActions.IndexOf(actionToRemove);
-        switch(indexOfActionToRemove+1){
+        DisableActionOnIndex(indexOfActionToRemove);
+        playerActions.RemoveAt(indexOfActionToRemove);
+
+        OnPlayerActionsListChanged?.Invoke(playerActions);
+    }
+
+    private void DisableActionOnIndex(int index) {
+        switch(index+1){
             case 1:
                 GameInput.Instance.DisableMainAction();
                 break;
@@ -78,17 +89,12 @@ public class PlayerActionsManager : NetworkBehaviour
             default:
                 Debug.Log("WHY TF DO YOU HAVE MORE THEN 4 ACTIONS!");
                 break;
-        }
-        playerActions.RemoveAt(indexOfActionToRemove);
-
-
-
-        OnPlayerActionsListChanged?.Invoke(playerActions);
+        }       
     }
 
     private void Player_OnLocalInstanceInitialised(){
         GameInput.Instance.OnLocalPlayerActionTriggered += GameInput_OnLocalPlayerActionTriggered;
-
+        Player.LocalInstance.GetComponent<PlayerCooldownManager>().OnActionCooldownFinished += PlayerCooldownManager_OnActionCooldownFinished;
         PlayerRole role = Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
         var actions = GameRoleManager.Instance.GetDataForRole(role).actions.Select(actionData => actionData.action);
         
@@ -99,5 +105,25 @@ public class PlayerActionsManager : NetworkBehaviour
         ActionsButtonManagerUI.Instance.UpdateButtons(playerActions);
     }
 
+    private void PlayerCooldownManager_OnActionCooldownFinished(PlayerAction action) {
+        int indexOfAction = playerActions.IndexOf(action);
+        switch(indexOfAction+1) {
+            case 1:
+                GameInput.Instance.EnableMainAction();
+                break;
+            case 2:
+                GameInput.Instance.EnablePrimaryAction();
+                break;
+            case 3:
+                GameInput.Instance.EnableAlternateAction();
+                break;
+            case 4:
+                GameInput.Instance.EnableOptionalAction();
+                break;
+            default:
+                Debug.Log("WHY TF DO YOU HAVE MORE THEN 4 ACTIONS!");
+                break;
+        }
+    }
 }
 

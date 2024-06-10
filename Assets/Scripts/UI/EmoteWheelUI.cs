@@ -38,8 +38,6 @@ public class EmoteWheelUI : BaseUISingleton<EmoteWheelUI>
     private void GameInput_SubscribeToEmote() {
         if(isOpen) Hide();
         else Show();
-
-        Debug.Log("Triggered");
     }
 
     private void Player_OnLocalInstanceInitialised(){

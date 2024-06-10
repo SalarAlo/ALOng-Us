@@ -10,29 +10,48 @@ public class ActionButtonUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI actionText;
     [SerializeField] private Image actionImage;
     [SerializeField] private TextMeshProUGUI coolDownText;
-    private bool actionSet;
-    private CanvasGroup canvasGroup;
+    [SerializeField] private Image buttonImage;
+    private ActionDataSO actionSet;
 
-    private void Awake() {
-        if(TryGetComponent(out canvasGroup)) return;
-        canvasGroup = transform.AddComponent<CanvasGroup>();
+    private void Start() {
+        Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
+    }
+
+    private void Player_OnLocalInstanceInitialised() {
+        PlayerCooldownManager playerCooldownManager = Player.LocalInstance.GetComponent<PlayerCooldownManager>();
+        playerCooldownManager.OnActionTimeChanged += PlayerCooldownManager_OnActionTimeChanged;
+    }
+
+    private void PlayerCooldownManager_OnActionTimeChanged(PlayerAction action, int seconds) {
+        ApplyChangesForCooldown(action, seconds);
     }
 
     public void Hide(){
         transform.localScale = Vector3.zero;
-        actionSet = false;
+        actionSet = null;
     }
 
     public void SetAction(PlayerAction action) {
-        var actionData = GeneralActionsManager.Instance.GetDataForAction(action);
-        actionSet = true;
+        actionSet = GeneralActionsManager.Instance.GetDataForAction(action);
 
         gameObject.SetActive(true);
-        actionImage.sprite = actionData.sprite;
-        actionText.text = actionData.action.ToString();
+        actionImage.sprite = actionSet.sprite;
+        actionText.text = actionSet.action.ToString();
+    }
+
+    public void ApplyChangesForCooldown(PlayerAction actionCooling, int amount){
+        if(!IsActionSet()) return;
+        if(actionSet.action != actionCooling) return;
+        if(amount == 0) {
+            coolDownText.text = "";
+            buttonImage.color = Color.white;
+            return;
+        }
+        coolDownText.text = amount.ToString();
+        buttonImage.color = new Color32(255, 255, 255, 122);
     }
 
     public bool IsActionSet(){
-        return actionSet;
+        return actionSet != null;
     }
 }
