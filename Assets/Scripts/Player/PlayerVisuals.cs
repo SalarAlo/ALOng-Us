@@ -8,12 +8,17 @@ public class PlayerVisuals : PlayerVisualsColor
     [SerializeField] private Transform visuals;
     [SerializeField] private TextMeshProUGUI nameTextField;
     [SerializeField] private Image emoteImage; 
+    [SerializeField] private SpriteRenderer miniMapIndicator; 
     protected override void Awake() {
         base.Awake();
         HideEmote();
     }
     public Transform GetVisualParent() => visuals;
-    public void DeactivateLocalVisuals(){
+    public override void SetColorTo(int colorIndex) {
+        base.SetColorTo(colorIndex);
+        miniMapIndicator.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
+    }
+    public void DeactivateLocalVisuals() { 
         foreach (Transform child in visuals){
             child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
         }

@@ -23,6 +23,8 @@ public class Player : NetworkBehaviour
         Initialize();
     }
 
+    public Vector3 GetPos() => transform.position;
+
     public void Initialize() {
         if (Player.LocalInstance != null) {
             Destroy(gameObject);

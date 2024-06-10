@@ -17,7 +17,7 @@ public class PlayerVisualsColor : NetworkBehaviour
         }
     }
     
-    public void SetColorTo(int colorIndex) {
+    public virtual void SetColorTo(int colorIndex) {
         material.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
     }
 }
