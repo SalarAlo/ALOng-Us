@@ -195,6 +195,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenMap"",
+                    ""type"": ""Button"",
+                    ""id"": ""13ce1ca5-7000-4340-98a1-cbc6739f479f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -206,6 +215,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Emote"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60432eae-7741-4af3-8bd1-5529b3367416"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -226,6 +246,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Emote = m_UI.FindAction("Emote", throwIfNotFound: true);
+        m_UI_OpenMap = m_UI.FindAction("OpenMap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -376,11 +397,13 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_Emote;
+    private readonly InputAction m_UI_OpenMap;
     public struct UIActions
     {
         private @InputActions m_Wrapper;
         public UIActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Emote => m_Wrapper.m_UI_Emote;
+        public InputAction @OpenMap => m_Wrapper.m_UI_OpenMap;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -393,6 +416,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Emote.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEmote;
                 @Emote.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEmote;
                 @Emote.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEmote;
+                @OpenMap.started -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenMap;
+                @OpenMap.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenMap;
+                @OpenMap.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnOpenMap;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -400,6 +426,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Emote.started += instance.OnEmote;
                 @Emote.performed += instance.OnEmote;
                 @Emote.canceled += instance.OnEmote;
+                @OpenMap.started += instance.OnOpenMap;
+                @OpenMap.performed += instance.OnOpenMap;
+                @OpenMap.canceled += instance.OnOpenMap;
             }
         }
     }
@@ -418,5 +447,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnEmote(InputAction.CallbackContext context);
+        void OnOpenMap(InputAction.CallbackContext context);
     }
 }

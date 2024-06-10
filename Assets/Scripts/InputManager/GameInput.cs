@@ -28,6 +28,10 @@ public class GameInput : Singleton<GameInput> {
         inputActions.UI.Emote.performed += _ => action?.Invoke();
     }
 
+    public void SubscribeToOpenMap(Action action) {
+        inputActions.UI.OpenMap.performed += _ => action?.Invoke();
+    }
+
     private void Player_OnLocalInstanceInitialised()
     {
         localPlayerController = Player.LocalInstance.GetComponent<PlayerController>();
