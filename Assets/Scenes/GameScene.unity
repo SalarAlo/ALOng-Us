@@ -8344,7 +8344,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 311
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 59dbd101d11a024458ca1be6049fe06b, type: 2}
   m_TargetDisplay: 0
@@ -42987,17 +42987,17 @@ MonoBehaviour:
   maxPlayerAmount: 10
   playerRoles:
   - role: 1
-    count: 4
+    count: 1
   - role: 2
-    count: 2
+    count: 0
   - role: 3
-    count: 1
+    count: 9
   - role: 4
-    count: 1
+    count: 0
   - role: 5
-    count: 1
+    count: 0
   - role: 6
-    count: 1
+    count: 0
 --- !u!1 &1139520121
 GameObject:
   m_ObjectHideFlags: 0
@@ -78264,7 +78264,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: f202ef71269d9014a98d7da804279b4f, type: 2}
   m_TargetDisplay: 0

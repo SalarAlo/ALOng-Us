@@ -17,6 +17,8 @@ public class MiniMapCam : MonoBehaviour
 
     private void Player_OnLocalInstanceInitialised(){
         followPlayer = true;
+        var playerController = Player.LocalInstance.GetComponent<PlayerController>();
+        transform.SetParent(playerController.GetOrientation());
     }
 
     private void Update() {

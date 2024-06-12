@@ -5,10 +5,5 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public static Action OnSystemsInitialized;
-
-    private IEnumerator Start() {
-        yield return null;
-        OnSystemsInitialized?.Invoke();
-    }
+    
 }

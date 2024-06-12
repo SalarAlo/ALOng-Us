@@ -9,6 +9,8 @@ public class PlayerVisualsColor : NetworkBehaviour
     
     [SerializeField] protected SkinnedMeshRenderer[] bodyParts;
     protected Material material;
+    protected Color color;
+    protected int colorIndex;
 
     protected virtual void Awake(){
         material = new Material(bodyParts[0].material);
@@ -18,6 +20,11 @@ public class PlayerVisualsColor : NetworkBehaviour
     }
     
     public virtual void SetColorTo(int colorIndex) {
-        material.color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
+        this.colorIndex = colorIndex;
+        color = ColorSelectionManager.Instance.GetColorAtIndex(colorIndex);
+        material.color = color;
     }
+
+    public Color GetColor() => color;
+    public int GetColorIndex() => colorIndex;
 }

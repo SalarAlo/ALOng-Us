@@ -36,25 +36,29 @@ public class GameRoleManager : Singleton<GameRoleManager>
                 return () => {
                     AlongUsMultiplayer.Instance.SetPlayerInvisibleServerRpc(Player.LocalInstance.NetworkObject);
                 };
+            case PlayerAction.Track:
+                return () => {
+                    if(!TryGetPlayerInFront(out Player player)) return;
+                    player.GetComponent<PlayerTracker>().Show();
+                    Player.LocalInstance.GetComponent<PlayerActionsManager>().ReplaceAction(PlayerAction.Track, PlayerAction.TakeTrack);
+                };
             default:
                 return null;
         }
         // return () => Debug.Log(playerAction.ToString());
     }
 
-    private bool TryGetRoleInFront(out PlayerRole playerRole){
+
+    private bool TryGetPlayerInFront(out Player player) {
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
         
         if (!Physics.Raycast(ray, out RaycastHit hit, reach)) { 
-            playerRole = PlayerRole.Nothing;
-            return false; 
-        }
-        if (!hit.transform.TryGetComponent(out PlayerRoleManager playerRoleManager)) { 
-            playerRole = PlayerRole.Nothing;
+            player = null;
             return false; 
         }
 
-        playerRole = playerRoleManager.GetRole();
-        return true;
+        return hit.transform.TryGetComponent(out player);
     }
+
+
 }
