@@ -26,6 +26,8 @@ public class PlayerTracker : MonoBehaviour
         Hide();
     }
 
+    public bool IsTracked() => tracker.gameObject.activeInHierarchy;
+
     public void Show() => tracker.gameObject.SetActive(true);
     public void Hide() => tracker.gameObject.SetActive(false);
 }
