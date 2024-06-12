@@ -95,7 +95,7 @@ public class GameInput : Singleton<GameInput> {
 
     private Action<InputAction.CallbackContext> GetActionForData(ActionDataSO data){
         return  _ => {
-            GameRoleManager.Instance.GetExecutableForAction(data.action)?.Invoke();
+            GeneralActionsManager.Instance.GetExecutableForAction(data.action)?.Invoke();
             OnLocalPlayerActionTriggered?.Invoke(data.action);
         };
     }

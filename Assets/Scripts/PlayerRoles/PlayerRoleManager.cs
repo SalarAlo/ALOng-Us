@@ -1,12 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Unity;
 
 public class PlayerRoleManager : MonoBehaviour {
     [SerializeField] private PlayerRole role;
 
     public PlayerRole GetRole() => role; 
-    public void SetRole(PlayerRole role) => this.role = role; 
+    public void SetRole(PlayerRole role)  {
+        this.role = role;
+    }
 }
