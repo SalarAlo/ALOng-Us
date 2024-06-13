@@ -12,6 +12,7 @@ public class ActionButtonUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI coolDownText;
     [SerializeField] private Image buttonImage;
     private ActionDataSO actionSet;
+    private bool activeAppearance = true;
 
     private void Start() {
         Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
@@ -53,5 +54,22 @@ public class ActionButtonUI : MonoBehaviour {
 
     public bool IsActionSet(){
         return actionSet != null;
+    }
+
+    private void Update() {
+        if(!IsActionSet()) return;
+        if (!activeAppearance && GeneralActionsManager.Instance.GetCheckForExecutionOfAction(actionSet.action)())
+            DisplayActive();
+        else if (activeAppearance && !GeneralActionsManager.Instance.GetCheckForExecutionOfAction(actionSet.action)())
+            DisplayInactive();
+    }
+
+    private void DisplayActive() {
+        buttonImage.color = new Color32(255, 255, 255, 255);
+        activeAppearance = true;
+    }
+    private void DisplayInactive(){
+        buttonImage.color = new Color32(255, 255, 255, 50);
+        activeAppearance = false;
     }
 }

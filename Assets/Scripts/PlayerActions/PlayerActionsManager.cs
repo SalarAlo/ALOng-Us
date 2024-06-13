@@ -124,5 +124,11 @@ public class PlayerActionsManager : NetworkBehaviour
                 break;
         }
     }
+
+    private void Update() {
+        foreach(PlayerAction action in playerActions) {
+            GeneralActionsManager.Instance.GetExecutableForActionUpdate(action)();
+        }
+    }
 }
 

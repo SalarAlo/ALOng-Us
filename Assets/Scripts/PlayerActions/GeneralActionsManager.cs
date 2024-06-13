@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,21 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                 return () => TryGetPlayerInFront(out Player player) && player.GetComponent<PlayerTracker>().IsTracked();
         }
         return () => true;
+    }
+
+    public Action GetExecutableForActionUpdate(PlayerAction action){
+        switch(action) {
+            case PlayerAction.Track:
+                return () => {
+                    if(!TryGetPlayerInFront(out Player player)) {
+                        return;
+                    }
+                    if (OutlineManager.Instance.IsPlayerOutlined(player)) return;
+                    OutlineManager.Instance.OutlinePlayer(player, () => !TryGetPlayerInFront(out Player _));
+                };
+        }
+
+        return () => Debug.Log("No update exctable necessary");
     }
 
     public Action GetExecutableForAction(PlayerAction playerAction){
