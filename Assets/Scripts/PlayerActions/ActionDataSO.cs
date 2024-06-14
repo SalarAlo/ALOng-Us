@@ -7,4 +7,5 @@ public class ActionDataSO : ScriptableObject {
     public PlayerAction action;
     public Sprite sprite;
     public int cooldown;
+    public bool immeadiateCooldown;
 }

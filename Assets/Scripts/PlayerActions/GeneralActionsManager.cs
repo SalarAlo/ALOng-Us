@@ -57,6 +57,10 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                 return () => {
                     // Kill the target
                 };
+            case PlayerAction.Morph:
+                return () => {
+                    MorphUI.Instance.Show();
+                };
             case PlayerAction.Invisible:
                 return () => {
                     if(!GetCheckForExecutionOfAction(playerAction)()) return;
