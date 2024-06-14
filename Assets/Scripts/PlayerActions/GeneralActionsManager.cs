@@ -31,8 +31,20 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                     if(!TryGetPlayerInFront(out Player player)) {
                         return;
                     }
-                    if (OutlineManager.Instance.IsPlayerOutlined(player)) return;
-                    OutlineManager.Instance.OutlinePlayer(player, () => !TryGetPlayerInFront(out Player _));
+                    OutlineManager.Instance.OutlinePlayer(player, () => 
+                        !TryGetPlayerInFront(out Player _) && 
+                        Player.LocalInstance.GetComponent<PlayerActionsManager>().HasAction(action)
+                    );
+                };
+            case PlayerAction.TakeTrack:
+                return () => {
+                    if(!TryGetPlayerInFront(out Player player)) {
+                        return;
+                    }
+                    OutlineManager.Instance.OutlinePlayer(player, () => 
+                        !TryGetPlayerInFront(out Player _) && 
+                        Player.LocalInstance.GetComponent<PlayerActionsManager>().HasAction(action)
+                    );
                 };
         }
 

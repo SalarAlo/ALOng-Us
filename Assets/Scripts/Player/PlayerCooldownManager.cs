@@ -15,7 +15,7 @@ public class PlayerCooldownManager : MonoBehaviour
         currentActionsOnCooldown = new();   
     }
 
-    public void AddActionToCooldown(PlayerAction actionToCool, int amountToCool, int indexSpot){
+    public void AddActionToCooldown(PlayerAction actionToCool, int amountToCool){
         if(currentActionsOnCooldown.ContainsKey(actionToCool)) {
             Debug.LogError($"{actionToCool} Action already cooling");
             return;

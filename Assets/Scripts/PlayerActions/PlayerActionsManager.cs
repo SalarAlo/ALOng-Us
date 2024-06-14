@@ -13,6 +13,9 @@ public class PlayerActionsManager : NetworkBehaviour
     public Action<List<PlayerAction>> OnPlayerActionsListChanged;
     [SerializeField] private List<PlayerAction> playerActions;
 
+    public bool HasAction(PlayerAction action) => playerActions.Contains(action);
+
+
     public override void OnNetworkSpawn() {
         if(NetworkManager.Singleton.LocalClientId == OwnerClientId)
             Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
@@ -29,7 +32,7 @@ public class PlayerActionsManager : NetworkBehaviour
         }
 
         PlayerCooldownManager playerCooldownManager = Player.LocalInstance.GetComponent<PlayerCooldownManager>();
-        playerCooldownManager.AddActionToCooldown(action, actionDataSO.cooldown, playerActions.IndexOf(action));
+        playerCooldownManager.AddActionToCooldown(action, actionDataSO.cooldown);
         DisableActionOnIndex(playerActions.IndexOf(action));
     }
 
