@@ -15,25 +15,9 @@ public class PlayerActionsManager : NetworkBehaviour
 
     public bool HasAction(PlayerAction action) => playerActions.Contains(action);
 
-
     public override void OnNetworkSpawn() {
         if(NetworkManager.Singleton.LocalClientId == OwnerClientId)
             Player.OnLocalInstanceInitialised += Player_OnLocalInstanceInitialised;
-    }
-
-    private void GameInput_OnLocalPlayerActionTriggered(PlayerAction action) {
-        ActionDataSO actionDataSO = GeneralActionsManager.Instance.GetDataForAction(action);
-
-        if(actionDataSO.cooldown == 0) return;
-
-        else if (actionDataSO.cooldown == -1) {
-            RemoveAction(action);
-            return;
-        }
-
-        PlayerCooldownManager playerCooldownManager = Player.LocalInstance.GetComponent<PlayerCooldownManager>();
-        playerCooldownManager.AddActionToCooldown(action, actionDataSO.cooldown);
-        DisableActionOnIndex(playerActions.IndexOf(action));
     }
 
     public void AddAction(PlayerAction actionToAdd) {
@@ -68,13 +52,14 @@ public class PlayerActionsManager : NetworkBehaviour
 
     public void RemoveAction(PlayerAction actionToRemove){
         int indexOfActionToRemove = playerActions.IndexOf(actionToRemove);
-        DisableActionOnIndex(indexOfActionToRemove);
+        DisableAction(actionToRemove);
         playerActions.RemoveAt(indexOfActionToRemove);
 
         OnPlayerActionsListChanged?.Invoke(playerActions);
     }
 
-    private void DisableActionOnIndex(int index) {
+    public void DisableAction(PlayerAction action) {
+        int index = playerActions.IndexOf(action);
         switch(index+1){
             case 1:
                 GameInput.Instance.DisableMainAction();
@@ -89,13 +74,12 @@ public class PlayerActionsManager : NetworkBehaviour
                 GameInput.Instance.DisableOptionalAction();
                 break;
             default:
-                Debug.Log("WHY TF DO YOU HAVE MORE THEN 4 ACTIONS!");
+                Debug.Log("Invalid index");
                 break;
         }       
     }
 
     private void Player_OnLocalInstanceInitialised(){
-        GameInput.Instance.OnLocalPlayerActionTriggered += GameInput_OnLocalPlayerActionTriggered;
         Player.LocalInstance.GetComponent<PlayerCooldownManager>().OnActionCooldownFinished += PlayerCooldownManager_OnActionCooldownFinished;
         PlayerRole role = Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole();
         var actions = GameRoleManager.Instance.GetDataForRole(role).actions.Select(actionData => actionData.action);

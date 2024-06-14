@@ -1,8 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using Unity;
 using Unity.Collections;
-using Unity.Mathematics;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -99,6 +98,31 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
 
         Debug.LogError("Passed in id doesnt have a player Data entry1");
         return default;
+    }
+
+    public void ChangePlayerAppearanceTo(ulong clientId, PlayerData playerDataToChangeTo, int lasting){
+        ChangePlayerAppearanceToServerRpc(clientId, playerDataToChangeTo);
+        if (lasting == -1) return;
+        Player playerToChange = Player.GetPlayerWithId(clientId);
+        StartCoroutine(ChangePlayerAppearanceDelayed(clientId, playerToChange.GetPlayerData(), 10));
+    }
+
+    private IEnumerator ChangePlayerAppearanceDelayed(ulong clientId, PlayerData playerDataToChangeTo, int delay){
+        yield return new WaitForSeconds(delay);
+        ChangePlayerAppearanceTo(clientId, playerDataToChangeTo, -1);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangePlayerAppearanceToServerRpc(ulong clientId, PlayerData playerDataToChangeTo){
+        ChangePlayerAppearanceToClientRpc(clientId, playerDataToChangeTo);
+    }
+
+    [ClientRpc]
+    private void ChangePlayerAppearanceToClientRpc(ulong clientId, PlayerData playerDataToChangeTo){
+        Player playerToChange = Player.GetPlayerWithId(clientId);
+        PlayerVisuals playerVisuals = playerToChange.GetComponent<PlayerVisuals>();
+        playerVisuals.SetColorTo(playerDataToChangeTo.colorIndex);
+        playerVisuals.SetPlayerName(playerDataToChangeTo.playerName.ToString());
     }
 
     // Only invoked on the server bc. OnServerStarted is only invoked on server

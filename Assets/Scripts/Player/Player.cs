@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,10 +12,15 @@ public class Player : NetworkBehaviour
     public static Action OnLocalInstanceInitialised;
     public static Action OnAllInstancesInitialised;
     public static Player LocalInstance;
-    
+    private PlayerData playerData;
+
     public override void OnNetworkSpawn() {
         if (!(OwnerClientId == NetworkManager.Singleton.LocalClientId)) return;
         StartCoroutine(TriggerInitialization());
+    }
+
+    public static Player GetPlayerWithId(ulong clientId) { 
+        return FindObjectsOfType<Player>().First(p => p.OwnerClientId == clientId);
     }
 
     private IEnumerator TriggerInitialization(){ 
@@ -31,6 +37,7 @@ public class Player : NetworkBehaviour
             Debug.LogError("There are more then one Local Player Instances");
         }
 
+        playerData = AlongUsMultiplayer.Instance.GetLocalPlayerData();
         LocalInstance = this;
 
         PlayerVisuals playerVisuals = GetComponent<PlayerVisuals>();
@@ -42,5 +49,9 @@ public class Player : NetworkBehaviour
         players[OwnerClientId] = LocalInstance;
         
         OnLocalInstanceInitialised?.Invoke();
+    }
+
+    public PlayerData GetPlayerData(){
+        return playerData;
     }
 }

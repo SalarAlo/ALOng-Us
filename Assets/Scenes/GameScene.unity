@@ -43161,13 +43161,13 @@ MonoBehaviour:
   - role: 2
     count: 0
   - role: 3
-    count: 10
+    count: 0
   - role: 4
     count: 0
   - role: 5
     count: 0
   - role: 6
-    count: 0
+    count: 10
 --- !u!1 &1139520121
 GameObject:
   m_ObjectHideFlags: 0

@@ -85,6 +85,7 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
         }
         // return () => Debug.Log(playerAction.ToString());
     }
+
     private Player GetPlayerInFront(){
         Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
         Physics.Raycast(ray, out RaycastHit hit);
