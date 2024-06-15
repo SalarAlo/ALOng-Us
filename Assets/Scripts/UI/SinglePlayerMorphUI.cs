@@ -18,10 +18,11 @@ public class SinglePlayerMorphUI : MonoBehaviour
         playerImage.color = ColorSelectionManager.Instance.GetColorAtIndex(data.colorIndex);
         swapButton.onClick.AddListener(() => {
             var playerCooldownManager = Player.LocalInstance.GetComponent<PlayerCooldownManager>();
-            playerCooldownManager.AddActionToCooldown(PlayerAction.Morph, GeneralActionsManager.Instance.GetDataForAction(PlayerAction.Morph).cooldown);
+            var morphActionData = GeneralActionsManager.Instance.GetDataForAction(PlayerAction.Morph);
+            playerCooldownManager.AddActionToCooldown(PlayerAction.Morph, morphActionData.cooldown);
             MorphUI.Instance.Hide();
 
-            AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(NetworkManager.Singleton.LocalClientId, data, 10);
+            AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(NetworkManager.Singleton.LocalClientId, data, ((LastingActionDataSO)morphActionData).lastingTime);
         });
     }
 }

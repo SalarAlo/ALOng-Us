@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 765e3c00c973f6c4180ca9ffe6b0c007, type: 3}
+  m_Script: {fileID: 11500000, guid: 713ae6572c6e9fb4ea0084fedf051433, type: 3}
   m_Name: MorphAction
   m_EditorClassIdentifier: 
   action: 2
   sprite: {fileID: 21300000, guid: cffae85515d6b444a97f8087855c200b, type: 3}
-  cooldown: 100
+  cooldown: 120
+  immeadiateCooldown: 0
+  lastingTime: 30

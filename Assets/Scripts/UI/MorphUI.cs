@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +22,12 @@ public class MorphUI : BaseUISingleton<MorphUI>
     }
 
     private void FillSelectionWithPlayers(){
-        Debug.Log("1");
         if(Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole() != PlayerRole.Morpher) return;
-        Debug.Log("2");
 
         foreach(PlayerData playerData in AlongUsMultiplayer.Instance.networkedPlayerDataList) {
-            Debug.Log("3");
-            // TODO: implement skipping of localInstance!
+            Debug.Log($"Currently iterating over {playerData.playerName}");
+            if(playerData.clientId == NetworkManager.Singleton.LocalClientId) continue;
+
             var singlePlayerMorphUI = Instantiate(singlePlayerMorphUIPrefab, playerSelectionParent);
             singlePlayerMorphUI.SetPlayerMorphUI(playerData);
         }

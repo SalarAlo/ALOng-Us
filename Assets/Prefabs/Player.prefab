@@ -1948,6 +1948,7 @@ GameObject:
   - component: {fileID: 8223811945470688647}
   - component: {fileID: 6007185357398038376}
   - component: {fileID: 4268370116453729828}
+  - component: {fileID: 3794586823849428561}
   m_Layer: 0
   m_Name: EmoteImage
   m_TagString: Untagged
@@ -2013,6 +2014,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3794586823849428561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054182358521737378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e49e4f161fbacb428b1256ef7700021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8120195366137392763
 GameObject:
   m_ObjectHideFlags: 0
@@ -2055,6 +2068,7 @@ GameObject:
   - component: {fileID: 3841889872892196274}
   - component: {fileID: 8555916977843494471}
   - component: {fileID: 4388448620837851534}
+  - component: {fileID: 2242938094780817641}
   m_Layer: 0
   m_Name: PlayerName
   m_TagString: Untagged
@@ -2180,6 +2194,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2242938094780817641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362669823431949074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e49e4f161fbacb428b1256ef7700021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8510959384431297770
 GameObject:
   m_ObjectHideFlags: 0

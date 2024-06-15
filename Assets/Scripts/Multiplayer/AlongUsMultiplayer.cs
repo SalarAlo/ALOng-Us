@@ -104,7 +104,7 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         ChangePlayerAppearanceToServerRpc(clientId, playerDataToChangeTo);
         if (lasting == -1) return;
         Player playerToChange = Player.GetPlayerWithId(clientId);
-        StartCoroutine(ChangePlayerAppearanceDelayed(clientId, playerToChange.GetPlayerData(), 10));
+        StartCoroutine(ChangePlayerAppearanceDelayed(clientId, playerToChange.GetPlayerData(), lasting));
     }
 
     private IEnumerator ChangePlayerAppearanceDelayed(ulong clientId, PlayerData playerDataToChangeTo, int delay){
