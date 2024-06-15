@@ -22,7 +22,7 @@ public class SinglePlayerMorphUI : MonoBehaviour
             playerCooldownManager.AddActionToCooldown(PlayerAction.Morph, morphActionData.cooldown);
             MorphUI.Instance.Hide();
 
-            AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(NetworkManager.Singleton.LocalClientId, data, ((LastingActionDataSO)morphActionData).lastingTime);
+            AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(NetworkManager.Singleton.LocalClientId, data, ((LastingActionDataSO)morphActionData).lastingTime, Player.LocalInstance.GetPlayerData());
         });
     }
 }

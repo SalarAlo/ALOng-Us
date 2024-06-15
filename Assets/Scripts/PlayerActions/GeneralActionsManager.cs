@@ -57,6 +57,10 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                 return () => {
                     // Kill the target
                 };
+            case PlayerAction.Sabotage:
+                return () => {
+                    SabotageUI.Instance.Show();
+                };
             case PlayerAction.Morph:
                 return () => {
                     MorphUI.Instance.Show();

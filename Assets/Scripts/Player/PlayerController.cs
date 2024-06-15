@@ -14,6 +14,16 @@ public class PlayerController : NetworkBehaviour {
     private Vector2 movementInput;
     private Vector3 movementDir;
 
+    public void DisableControls() {
+        SetCanMove(false);
+        PlayerCam.Instance.SetCanLookAround(false);
+    }
+
+    public void EnableControls() {
+        SetCanMove(true);
+        PlayerCam.Instance.SetCanLookAround(true);
+    }
+
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;

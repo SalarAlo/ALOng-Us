@@ -25,7 +25,6 @@ public class MorphUI : BaseUISingleton<MorphUI>
         if(Player.LocalInstance.GetComponent<PlayerRoleManager>().GetRole() != PlayerRole.Morpher) return;
 
         foreach(PlayerData playerData in AlongUsMultiplayer.Instance.networkedPlayerDataList) {
-            Debug.Log($"Currently iterating over {playerData.playerName}");
             if(playerData.clientId == NetworkManager.Singleton.LocalClientId) continue;
 
             var singlePlayerMorphUI = Instantiate(singlePlayerMorphUIPrefab, playerSelectionParent);
@@ -35,14 +34,12 @@ public class MorphUI : BaseUISingleton<MorphUI>
 
     public override void Show() {
         base.Show();
-        PlayerCam.Instance.SetCanLookAround(false);
-        Player.LocalInstance.GetComponent<PlayerController>().SetCanMove(false);
+        Player.LocalInstance.GetComponent<PlayerController>().DisableControls();
     }
 
     public override void Hide() {
         base.Hide();
-        PlayerCam.Instance.SetCanLookAround(true);
         if(Player.LocalInstance != null)
-            Player.LocalInstance.GetComponent<PlayerController>().SetCanMove(true);
+            Player.LocalInstance.GetComponent<PlayerController>().EnableControls();
     }
 }

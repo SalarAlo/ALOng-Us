@@ -100,16 +100,18 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         return default;
     }
 
-    public void ChangePlayerAppearanceTo(ulong clientId, PlayerData playerDataToChangeTo, int lasting){
+    public void ChangePlayerAppearanceTo(ulong clientId, PlayerData playerDataToChangeTo){
         ChangePlayerAppearanceToServerRpc(clientId, playerDataToChangeTo);
-        if (lasting == -1) return;
-        Player playerToChange = Player.GetPlayerWithId(clientId);
-        StartCoroutine(ChangePlayerAppearanceDelayed(clientId, playerToChange.GetPlayerData(), lasting));
+    }
+
+    public void ChangePlayerAppearanceTo(ulong clientId, PlayerData playerDataToChangeTo, int lasting, PlayerData original){
+        ChangePlayerAppearanceTo(clientId, playerDataToChangeTo);
+        StartCoroutine(ChangePlayerAppearanceDelayed(clientId, original, lasting));
     }
 
     private IEnumerator ChangePlayerAppearanceDelayed(ulong clientId, PlayerData playerDataToChangeTo, int delay){
         yield return new WaitForSeconds(delay);
-        ChangePlayerAppearanceTo(clientId, playerDataToChangeTo, -1);
+        ChangePlayerAppearanceTo(clientId, playerDataToChangeTo);
     }
 
     [ServerRpc(RequireOwnership = false)]

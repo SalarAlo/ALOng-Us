@@ -37,7 +37,7 @@ public class Player : NetworkBehaviour
             Debug.LogError("There are more then one Local Player Instances");
         }
 
-        playerData = AlongUsMultiplayer.Instance.GetLocalPlayerData();
+        SetPlayerDataServerRpc(playerData);
         LocalInstance = this;
 
         PlayerVisuals playerVisuals = GetComponent<PlayerVisuals>();
@@ -49,6 +49,16 @@ public class Player : NetworkBehaviour
         players[OwnerClientId] = LocalInstance;
         
         OnLocalInstanceInitialised?.Invoke();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetPlayerDataServerRpc(PlayerData data){
+        SetPlayerDataClientRpc(data);
+    }
+
+    [ClientRpc]
+    public void SetPlayerDataClientRpc(PlayerData data){
+        playerData = data;
     }
 
     public PlayerData GetPlayerData(){
