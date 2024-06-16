@@ -13,6 +13,7 @@ public class Player : NetworkBehaviour
     public static Player LocalInstance;
     private PlayerData playerData;
 
+
     public override void OnNetworkSpawn() {
         if (!(OwnerClientId == NetworkManager.Singleton.LocalClientId)) return;
         StartCoroutine(TriggerInitialization());

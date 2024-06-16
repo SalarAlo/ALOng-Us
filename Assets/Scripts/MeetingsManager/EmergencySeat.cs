@@ -7,12 +7,18 @@ public class EmergencySeat : MonoBehaviour
     public void FillSeat(Player player){
         posBefore = player.GetPos();
         occupiedBy = player;
-        player.transform.parent = transform;
-        player.transform.localScale = Vector3.one;
-        player.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
+
+        player.GetComponent<PlayerController>().SetCanMove(false);
+        player.transform.position = transform.position;
+        player.transform.localScale = transform.lossyScale;
     }
 
     public bool IsOccupied() => occupiedBy != null;
 
-    public void ClearSeat() => occupiedBy = null;
+    public void ClearSeat() {
+        occupiedBy.transform.localScale = Vector3.one;
+        occupiedBy.transform.position = posBefore;
+        occupiedBy.GetComponent<PlayerController>().SetCanMove(true);
+        occupiedBy = null;
+    }
 }

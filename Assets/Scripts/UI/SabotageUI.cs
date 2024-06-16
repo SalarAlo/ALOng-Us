@@ -22,10 +22,6 @@ public class SabotageUI : BaseUISingleton<SabotageUI>
             playerName = "X"
         };
 
-        void BackToNormal(){
-            GameManager.Instance.SetGameState(GameState.Regular);
-        }
-
         var networkedPlayerDataList = AlongUsMultiplayer.Instance.networkedPlayerDataList;
 
         for(int i = 0; i < networkedPlayerDataList.Count; i++){
@@ -40,14 +36,15 @@ public class SabotageUI : BaseUISingleton<SabotageUI>
                 continue;
             }
 
+            //TODO: NOTIFY GAMEMANAGER OF BACK TO REGULAR (RPCS!)
+
             // Only invoke this on the last playerData to make sure that if the player is back to normal 
             // we notify the gamestate that its back to regular instead of sabotage
             AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(
                 originalPlayerData.clientId,
                 playerDataColorblind,
                 10, 
-                originalPlayerData,
-                BackToNormal
+                originalPlayerData
             );
         }
 

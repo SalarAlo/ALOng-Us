@@ -26,6 +26,7 @@ public class EmergencyMeetingUI : BaseUISingleton<EmergencyMeetingUI>
     }
 
     private void AlertButton_OnClick(){
-        
+        Hide();
+        EmergencyMeetingManager.Instance.TriggerEmergency(AlongUsMultiplayer.Instance.GetLocalPlayerData());
     }
 }

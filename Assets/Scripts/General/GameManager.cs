@@ -1,13 +1,27 @@
 using System;
+using Unity.Netcode;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : SingletonNetwork<GameManager>
 {
     public Action<GameState> OnGameStateChanged;
-    private GameState gameState;
+    private NetworkVariable<GameState> networkedGameState;
 
-    public GameState GetGameState() => gameState;
+    public override void Awake() {
+        base.Awake();
+        networkedGameState = new();
+    }
+
+    public override void OnNetworkSpawn(){
+        networkedGameState.OnValueChanged += (previousState, newState) => OnGameStateChanged?.Invoke(newState);
+    }
+
+    public GameState GetGameState() => networkedGameState.Value;
     public void SetGameState(GameState newState) {
-        OnGameStateChanged?.Invoke(newState);
-        gameState = newState;
+        SetGameStateServerRpc(newState);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetGameStateServerRpc(GameState state){
+        networkedGameState.Value = state;
     }
 }
