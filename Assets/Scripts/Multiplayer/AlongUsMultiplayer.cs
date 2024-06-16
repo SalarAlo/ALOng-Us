@@ -25,37 +25,23 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         NetworkManager.Singleton.OnServerStarted += NetworkManager_OnServerStarted;
     }
 
-    public void SetColorOfPlayer(ulong clientId, int colorIndex){
-        for(int i = 0;  i < networkedPlayerDataList.Count; i++) {
-            var data = networkedPlayerDataList[i];
-            if(data.clientId == clientId) {
-                data.colorIndex = colorIndex;
-                networkedPlayerDataList[i] = data;
-                break;
-            }
-        }
+    #region Meeting Logic
+    public void StartMeeting() {
+        StartMeetingServerRpc();
     }
 
-    public PlayerData GetLocalPlayerData(){ 
-        foreach(var playerData in networkedPlayerDataList) {
-            if (playerData.clientId == NetworkManager.LocalClientId) return playerData;
-        }
-        return default;
-    }
     [ServerRpc(RequireOwnership = false)]
-    public void SetPlayerInvisibleServerRpc(NetworkObjectReference networkedPlayerObjectRef){
-        SetPlayerInvisibleClientRpc(networkedPlayerObjectRef);
+    public void StartMeetingServerRpc(){
+        StartMeetingClientRpc();
     }
 
     [ClientRpc]
-    private void SetPlayerInvisibleClientRpc(NetworkObjectReference networkedPlayerObjectRef){
-        networkedPlayerObjectRef.TryGet(out NetworkObject networkedPlayerObject);
-        PlayerVisuals playerController = networkedPlayerObject.GetComponent<PlayerVisuals>();
-        foreach (Transform child in playerController.GetVisualParent()){
-            child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
-        }
-    }
+    public void StartMeetingClientRpc(){
 
+    }
+    #endregion
+
+    #region  Register Logic
     [ClientRpc]
     private void RegisterPlayerClientRpc(ClientRpcParams clientRpcReceiveParams = default) {
         RegisterPlayerServerRpc(playerName);
@@ -88,17 +74,19 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         ColorSelectionManager.Instance.SetColorAvaiable(playerData.colorIndex);
         networkedPlayerDataList.RemoveAt(i);
     }
+    #endregion
 
-    public PlayerData GetPlayerDataByClientId(ulong clientId) {
-        foreach(PlayerData playerData in networkedPlayerDataList){
-            if(playerData.clientId == clientId){
-                return playerData;
-            }
+    #region Getters
+    public PlayerData GetLocalPlayerData(){ 
+        foreach(var playerData in networkedPlayerDataList) {
+            if (playerData.clientId == NetworkManager.LocalClientId) return playerData;
         }
-
-        Debug.LogError("Passed in id doesnt have a player Data entry1");
         return default;
     }
+    public string GetPlayerName() => playerName;
+    #endregion
+
+    #region Player Appearance 
 
     public void ChangePlayerAppearanceTo(ulong clientId, PlayerData playerDataToChangeTo){
         ChangePlayerAppearanceToServerRpc(clientId, playerDataToChangeTo);
@@ -126,6 +114,33 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         playerVisuals.SetColorTo(playerDataToChangeTo.colorIndex);
         playerVisuals.SetPlayerName(playerDataToChangeTo.playerName.ToString());
     }
+    
+    [ClientRpc]
+    private void SetPlayerInvisibleClientRpc(NetworkObjectReference networkedPlayerObjectRef){
+        networkedPlayerObjectRef.TryGet(out NetworkObject networkedPlayerObject);
+        PlayerVisuals playerController = networkedPlayerObject.GetComponent<PlayerVisuals>();
+        foreach (Transform child in playerController.GetVisualParent()){
+            child.gameObject.layer = LayerMask.NameToLayer("CameraIgnore");
+        }
+    }
+        public void SetColorOfPlayer(ulong clientId, int colorIndex){
+        for(int i = 0;  i < networkedPlayerDataList.Count; i++) {
+            var data = networkedPlayerDataList[i];
+            if(data.clientId == clientId) {
+                data.colorIndex = colorIndex;
+                networkedPlayerDataList[i] = data;
+                break;
+            }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetPlayerInvisibleServerRpc(NetworkObjectReference networkedPlayerObjectRef){
+        SetPlayerInvisibleClientRpc(networkedPlayerObjectRef);
+    }
+    #endregion
+
+    #region  listeners
 
     // Only invoked on the server bc. OnServerStarted is only invoked on server
     private void NetworkManager_OnServerStarted() {
@@ -170,7 +185,7 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         Loader.Instance.LoadScene(Loader.Scene.CharacterSelectionScene);
         Loader.Instance.OnSceneChanged += Loader_OnSceneChanged;
     }
-
+    
     private void Loader_OnSceneChanged(Loader.Scene scene){
         if(LobbyManager.Instance.IsLobbyHost()) {
             StartHost();
@@ -181,6 +196,10 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
         Loader.Instance.OnSceneChanged -= Loader_OnSceneChanged;
     }
 
+    private void NameMenuUI_OnNameSet(string playerName) => this.playerName = playerName;
+    #endregion
+
+    #region Host and Server Starting
     private void StartHost() {
         NetworkManager.Singleton.StartHost();
     }
@@ -188,9 +207,7 @@ public class AlongUsMultiplayer : SingletonNetworkPersistent<AlongUsMultiplayer>
     private void StartClient() {
         NetworkManager.Singleton.StartClient();
     }
-
-    private void NameMenuUI_OnNameSet(string playerName) => this.playerName = playerName;
-    public string GetPlayerName() => playerName;
+    #endregion
 }
 
 public struct PlayerData : INetworkSerializable, IEquatable<PlayerData> {
