@@ -4,6 +4,8 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using UnityEditor;
 
 public class GeneralActionsManager : Singleton<GeneralActionsManager>
 {
@@ -20,6 +22,8 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                 return () => TryGetPlayerInFront(out Player player) && !player.GetComponent<PlayerTracker>().IsTracked();
             case PlayerAction.TakeTrack:
                 return () => TryGetPlayerInFront(out Player player) && player.GetComponent<PlayerTracker>().IsTracked();
+            case PlayerAction.Use:
+                return () => TryGetUsableInFront(out IUseable _);
         }
         return () => true;
     }
@@ -52,7 +56,13 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
     }
 
     public Action GetExecutableForAction(PlayerAction playerAction){
+        if(!GetCheckForExecutionOfAction(playerAction)()) return () => Debug.Log("Cant execute action");
         switch(playerAction){
+            case PlayerAction.Use:
+                return () => {
+                    TryGetUsableInFront(out IUseable useable);
+                    useable.Use();
+                };
             case PlayerAction.Kill:
                 return () => {
                     // Kill the target
@@ -67,19 +77,16 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                 };
             case PlayerAction.Invisible:
                 return () => {
-                    if(!GetCheckForExecutionOfAction(playerAction)()) return;
                     AlongUsMultiplayer.Instance.SetPlayerInvisibleServerRpc(Player.LocalInstance.NetworkObject);
                 };
             case PlayerAction.Track:
                 return () => {
-                    if(!GetCheckForExecutionOfAction(playerAction)()) return;
                     Player playerToTrack = GetPlayerInFront();
                     playerToTrack.GetComponent<PlayerTracker>().Show();
                     Player.LocalInstance.GetComponent<PlayerActionsManager>().ReplaceAction(PlayerAction.Track, PlayerAction.TakeTrack);
                 };
             case PlayerAction.TakeTrack:
                 return () => {
-                    if(!GetCheckForExecutionOfAction(playerAction)()) return;
                     Player playerToUntrack = GetPlayerInFront();
                     playerToUntrack.GetComponent<PlayerTracker>().Hide();
                     Player.LocalInstance.GetComponent<PlayerActionsManager>().ReplaceAction(PlayerAction.TakeTrack, PlayerAction.Track);
@@ -88,6 +95,16 @@ public class GeneralActionsManager : Singleton<GeneralActionsManager>
                 return null;
         }
         // return () => Debug.Log(playerAction.ToString());
+    }
+
+    private bool TryGetUsableInFront(out IUseable useable){
+        Ray ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, reach);
+        bool hitUseable = false;
+        useable = null;
+        if(hitSomething)
+            hitUseable = hit.transform.TryGetComponent(out useable);
+        return hitSomething && hitUseable;
     }
 
     private Player GetPlayerInFront(){
