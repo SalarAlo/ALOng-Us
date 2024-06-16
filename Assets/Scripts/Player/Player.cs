@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    public static Dictionary<ulong, Player> players = new();
     [SerializeField] private Transform cameraPos;
     public static Action OnLocalInstanceInitialised;
     public static Action OnAllInstancesInitialised;
@@ -29,6 +28,10 @@ public class Player : NetworkBehaviour
         Initialize();
     }
 
+    public static List<Player> GetAllPlayers(){
+        return FindObjectsOfType<Player>().ToList();
+    }
+
     public Vector3 GetPos() => transform.position;
 
     public void Initialize() {
@@ -46,8 +49,6 @@ public class Player : NetworkBehaviour
         PlayerCam.Instance.SetOrientation(GetComponent<PlayerController>().GetOrientation());
         playerVisuals.DeactivateLocalVisuals();
 
-        players[OwnerClientId] = LocalInstance;
-        
         OnLocalInstanceInitialised?.Invoke();
     }
 

@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class SabotageUI : BaseUISingleton<SabotageUI>
@@ -27,10 +22,36 @@ public class SabotageUI : BaseUISingleton<SabotageUI>
             playerName = "X"
         };
 
-        foreach(PlayerData playerData in AlongUsMultiplayer.Instance.networkedPlayerDataList){
-            AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(playerData.clientId, playerDataColorblind, 10, playerData);
+        void BackToNormal(){
+            GameManager.Instance.SetGameState(GameState.Regular);
         }
 
+        var networkedPlayerDataList = AlongUsMultiplayer.Instance.networkedPlayerDataList;
+
+        for(int i = 0; i < networkedPlayerDataList.Count; i++){
+            var originalPlayerData = networkedPlayerDataList[i];
+            if(i != networkedPlayerDataList.Count-1){
+                AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(
+                    originalPlayerData.clientId,
+                    playerDataColorblind,
+                    10, 
+                    originalPlayerData
+                );
+                continue;
+            }
+
+            // Only invoke this on the last playerData to make sure that if the player is back to normal 
+            // we notify the gamestate that its back to regular instead of sabotage
+            AlongUsMultiplayer.Instance.ChangePlayerAppearanceTo(
+                originalPlayerData.clientId,
+                playerDataColorblind,
+                10, 
+                originalPlayerData,
+                BackToNormal
+            );
+        }
+
+        GameManager.Instance.SetGameState(GameState.Sabotage);
         Hide();
     }
 
