@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class PlayerActionsManager : NetworkBehaviour
@@ -45,6 +41,16 @@ public class PlayerActionsManager : NetworkBehaviour
         OnPlayerActionsListChanged?.Invoke(playerActions);
     }
 
+    public List<PlayerAction> DisableAllActions(){
+        List<PlayerAction> playerActionsCopy = new(playerActions);
+
+        foreach(var action in playerActions){
+            RemoveAction(action);
+        }
+
+        return playerActionsCopy;
+    }
+
     public void ReplaceAction(PlayerAction actionToRemove, PlayerAction actionToAdd) {
         RemoveAction(actionToRemove);
         AddAction(actionToAdd);
@@ -76,7 +82,7 @@ public class PlayerActionsManager : NetworkBehaviour
             default:
                 Debug.Log("Invalid index");
                 break;
-        }       
+        }
     }
 
     private void Player_OnLocalInstanceInitialised(){

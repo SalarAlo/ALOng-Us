@@ -10,7 +10,7 @@ public class ActionButtonUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI actionText;
     [SerializeField] private Image actionImage;
     [SerializeField] private TextMeshProUGUI coolDownText;
-    [SerializeField] private Image buttonImage;
+    [SerializeField] private GameObject disabledImage;
     private ActionDataSO actionSet;
     private bool activeAppearance = true;
 
@@ -30,6 +30,7 @@ public class ActionButtonUI : MonoBehaviour {
     public void Hide(){
         transform.localScale = Vector3.zero;
         actionSet = null;
+        disabledImage.SetActive(false);
     }
 
     public void SetAction(PlayerAction action) {
@@ -45,11 +46,17 @@ public class ActionButtonUI : MonoBehaviour {
         if(actionSet.action != actionCooling) return;
         if(amount == 0) {
             coolDownText.text = "";
-            buttonImage.color = Color.white;
+            foreach(Image image in transform.GetComponentsInChildren<Image>()){
+                image.color = new Color(image.color.r, image.color.g, image.color.b, 1f);
+            }
+            disabledImage.SetActive(false);
             return;
         }
         coolDownText.text = amount.ToString();
-        buttonImage.color = new Color32(255, 255, 255, 122);
+        foreach(Image image in transform.GetComponentsInChildren<Image>()){
+            image.color = new Color(image.color.r, image.color.g, image.color.b, .5f);
+        }
+        disabledImage.SetActive(true);
     }
 
     public bool IsActionSet(){
@@ -65,11 +72,17 @@ public class ActionButtonUI : MonoBehaviour {
     }
 
     private void DisplayActive() {
-        buttonImage.color = new Color32(255, 255, 255, 255);
+        foreach(Image image in transform.GetComponentsInChildren<Image>()){
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1f);
+        }
+        disabledImage.SetActive(false);
         activeAppearance = true;
     }
     private void DisplayInactive(){
-        buttonImage.color = new Color32(255, 255, 255, 50);
+        foreach(Image image in transform.GetComponentsInChildren<Image>()){
+            image.color = new Color(image.color.r, image.color.g, image.color.b, .5f);
+        }
+        disabledImage.SetActive(true);
         activeAppearance = false;
     }
 }
